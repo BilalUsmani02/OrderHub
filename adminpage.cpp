@@ -42,6 +42,34 @@ adminPage::adminPage(QWidget *parent)
         }
 
 
+        vector<Order>* orders = Store::getInstance()->allOrders();
+
+        // Clear existing rows
+        ui->orderList->setRowCount(0);
+
+        // Set column headers (optional if already done in Designer)
+        ui->orderList->setColumnCount(3);
+        ui->orderList->setHorizontalHeaderLabels(QStringList() << "Order ID" << "User ID" << "Status");
+
+        // Check if orders list is empty
+        if (orders->empty()) {
+        ui->orderList->setRowCount(1);
+        ui->orderList->setItem(0, 0, new QTableWidgetItem("No orders"));
+        ui->orderList->setSpan(0, 0, 1, 3); // Span across all 3 columns
+        }
+
+        int row = 0;
+        for (const auto& order : *orders) {
+            ui->orderList->insertRow(row);
+            ui->orderList->setItem(row, 0, new QTableWidgetItem(QString::number(order.getId())));
+            ui->orderList->setItem(row, 1, new QTableWidgetItem(QString::number(order.getUserId())));
+            ui->orderList->setItem(row, 2, new QTableWidgetItem(QString::fromStdString(order.getStatus())));
+            ++row;
+        }
+
+        ui->orderList->resizeColumnsToContents();  // Optional: Auto-resize columns
+
+
 }
 }
 adminPage::~adminPage()

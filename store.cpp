@@ -402,8 +402,14 @@ void Store::trackOrder(int orderId){
         store.updateOrderStatus(orderId, status);
     }
 
-    User::User(int i, string n){
+    User::User(string n){
+        id=nextUid;
+        nextUid++;
+        name=n;
+    }
+    User::User(int i,string n){
         id=i;
+        nextUid++;
         name=n;
     }
     int User::getId() const{return id;}
@@ -479,7 +485,7 @@ void Store::trackOrder(int orderId){
         store.displayUserOrders(id);
     }
 
-int User::id=1;
+int User::nextUid=1;
 
 int authenticator(QString username,QString password){
     if (username=="user123" && password=="user123"){
