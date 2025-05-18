@@ -128,12 +128,12 @@ void userPage::populateCartTable(const Order& ord)
             int productId = it.Product::getId();
 
             if (currentQty > 1) {
-                order->decreaseQuantity(productId);  // implement this method in Order class
+                order.decreaseQuantity(productId);  // implement this method in Order class
             } else {
-                order->removeItem(productId);        // implement this method in Order class
+                order.removeItem(productId);        // implement this method in Order class
             }
 
-            populateCartTable(*order);  // refresh the table
+            populateCartTable(order);  // refresh the table
             ui->cartList->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
             // or: resizeColumnsToContents() for automatic adjustment
 
