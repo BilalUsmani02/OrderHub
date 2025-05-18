@@ -156,15 +156,17 @@ userPage::~userPage()
 
 void userPage::on_tabWidget_tabBarClicked(int index)
 {
-    qDebug("yoo");
     ui->orderTotal->hide();
     ui->label->hide();
     ui->placeOrder->hide();
 
+    ui->cartList->clear();
+    ui->cartList->setRowCount(0);
+    ui->cartList->setColumnCount(0);
+
     const int productTabIndex =0;
     const int cartTabIndex = 2;
-
-    if (index == cartTabIndex ) {
+    if (index == cartTabIndex && !order.getCart().empty() ) {
         populateCartTable(order);
         ui->orderTotal->show();
         ui->label->show();
@@ -227,9 +229,8 @@ void userPage::on_placeOrder_clicked()
 }
 
 void userPage::onPaymentFinished() {
-    qDebug("yh ho rha hy");
     order.clearOrder();
-
+    ui->tabWidget->setCurrentIndex(0);
 }
 
 

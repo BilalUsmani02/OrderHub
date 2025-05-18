@@ -24,6 +24,7 @@ login::login(QWidget *parent)
     , ui(new Ui::login)
 {
     ui->setupUi(this);
+    hideAll();
 }
 
 login::~login()
@@ -151,4 +152,45 @@ void login::on_registerBtn_clicked()
 }
 
 
+void login::hideAll() {
+    // Hide all login and register widgets
+    ui->iusername->hide();
+    ui->ipassword->hide();
+    ui->loginbutton->hide();
+    ui->label->hide();
+    ui->label_2->hide();
+    ui->label_4->hide();
 
+    ui->rusername->hide();
+    ui->rpassword->hide();
+    ui->registerBtn->hide();
+    ui->label_3->hide();
+    ui->label_6->hide();
+    ui->label_5->hide();
+}
+
+
+void login::on_LP_clicked() {
+    hideAll();
+
+    // Show login widgets
+    ui->iusername->show();
+    ui->ipassword->show();
+    ui->loginbutton->show();
+    ui->label->show();
+    ui->label_2->show();
+    ui->label_4->show();
+}
+
+
+void login::on_RP_clicked() {
+    hideAll();
+
+    // Show register widgets
+    ui->rusername->show();
+    ui->rpassword->show();
+    ui->registerBtn->show();
+    ui->label_3->show();
+    ui->label_6->show();
+    ui->label_5->show();
+}

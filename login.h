@@ -23,6 +23,10 @@ private slots:
 
     void on_registerBtn_clicked();
 
+    void on_LP_clicked();
+    void hideAll();
+    void on_RP_clicked();
+
 private:
     Ui::login *ui;
 };

@@ -149,6 +149,11 @@ void Order::decreaseQuantity(int productId) {
     }
 }
 
+void Order::clearOrder(){
+    cart.clear();
+    orderId=nextId++;
+}
+
 
 void Order::removeItem(int productId) {
     cart.erase(std::remove_if(cart.begin(), cart.end(),
@@ -252,10 +257,6 @@ vector<Order>* Store::allOrders() {
     return &orders;
 }
 
-void Order::clearOrder(){
-    cart.clear();
-    orderId=nextId++;
-}
 
 Store::~Store(){
     saveProducts();

@@ -41,7 +41,10 @@ template <> constexpr inline auto login::qt_create_metaobjectdata<qt_meta_tag_ZN
         "login",
         "on_loginbutton_clicked",
         "",
-        "on_registerBtn_clicked"
+        "on_registerBtn_clicked",
+        "on_LP_clicked",
+        "hideAll",
+        "on_RP_clicked"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -49,6 +52,12 @@ template <> constexpr inline auto login::qt_create_metaobjectdata<qt_meta_tag_ZN
         QtMocHelpers::SlotData<void()>(1, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'on_registerBtn_clicked'
         QtMocHelpers::SlotData<void()>(3, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'on_LP_clicked'
+        QtMocHelpers::SlotData<void()>(4, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'hideAll'
+        QtMocHelpers::SlotData<void()>(5, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'on_RP_clicked'
+        QtMocHelpers::SlotData<void()>(6, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -74,6 +83,9 @@ void login::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
         switch (_id) {
         case 0: _t->on_loginbutton_clicked(); break;
         case 1: _t->on_registerBtn_clicked(); break;
+        case 2: _t->on_LP_clicked(); break;
+        case 3: _t->hideAll(); break;
+        case 4: _t->on_RP_clicked(); break;
         default: ;
         }
     }
@@ -99,14 +111,14 @@ int login::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 5;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 2)
+        if (_id < 5)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 2;
+        _id -= 5;
     }
     return _id;
 }
