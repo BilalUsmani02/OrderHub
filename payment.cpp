@@ -126,8 +126,8 @@ void Payment::on_placeOrder_clicked()
     ord.setPaymentMethod(payment);
     store->addOrder(ord);
     QMessageBox::information(this, "Success", "Payment recorded, order placed.");
-    delete this;
+    qDebug("Here");
+    emit paymentCompleted();  // Add this line
+    this->close();            // Then close
+    qDebug("closed");
 }
-
-
-

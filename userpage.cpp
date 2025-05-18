@@ -86,39 +86,7 @@ userPage::userPage(User& user,QWidget *parent): QWidget(parent), ui(new Ui::user
 
             });
 
-            vector<Order>* orders = Store::getInstance()->allOrders();
-
-            // Clear existing rows
-            ui->orderList->setRowCount(0);
-
-            // Set column headers (optional if already done in Designer)
-            ui->orderList->setColumnCount(2);
-            ui->orderList->setHorizontalHeaderLabels(QStringList() << "Order ID" << "Status");
-
-            // Check if orders list is empty
-            if (orders->empty()) {
-                ui->orderList->setRowCount(1);
-                ui->orderList->setItem(0, 0, new QTableWidgetItem("No orders"));
-                ui->orderList->setSpan(0, 0, 1, 3); // Span across all 3 columns
-            }
-            bool ord=false;
-            int row = 0;
-            for (const auto& order : *orders) {
-                if(order.getUserId()==currentUser.getId()){
-                    ord=true;
-                    ui->orderList->insertRow(row);
-                    ui->orderList->setItem(row, 0, new QTableWidgetItem(QString::number(order.getId())));
-                    ui->orderList->setItem(row, 2, new QTableWidgetItem(QString::fromStdString(order.getStatus())));
-                    ++row;
-                }
-            }
-            if(ord==false){
-                ui->orderList->setRowCount(1);
-                ui->orderList->setItem(0, 0, new QTableWidgetItem("No orders"));
-                ui->orderList->setSpan(0, 0, 1, 3); // Span across all 3 columns
-            }
-
-            ui->orderList->resizeColumnsToContents();  // Optional: Auto-resize columns
+            // Optional: Auto-resize columns
         }
     }
 }
@@ -161,10 +129,12 @@ void userPage::populateCartTable(const Order& ord)
 }
 
 
-
-
 userPage::~userPage()
 {
+    if (order) {
+        delete order;
+        order = nullptr;
+    }
     delete ui;
 }
 
@@ -184,23 +154,69 @@ void userPage::on_tabWidget_tabBarClicked(int index)
         ui->orderTotal->show();
         ui->label->show();
         ui->placeOrder->show();
-
     }else{
         ui->orderTotal->hide();
         ui->label->hide();
         ui->placeOrder->hide();
     }
 
+    if(index==1){
+        vector<Order>* orders = Store::getInstance()->allOrders();
+
+        // Clear existing rows
+        ui->orderList->setRowCount(0);
+
+        // Set column headers (optional if already done in Designer)
+        ui->orderList->setColumnCount(2);
+        ui->orderList->setHorizontalHeaderLabels(QStringList() << "Order ID" << "Status");
+
+        // Check if orders list is empty
+        if (orders->empty()) {
+            ui->orderList->setRowCount(1);
+            ui->orderList->setItem(0, 0, new QTableWidgetItem("No orders"));
+            ui->orderList->setSpan(0, 0, 1, 3); // Span across all 3 columns
+        }
+        bool ord=false;
+        int row = 0;
+        for (const auto& order : *orders) {
+            if(order.getUserId()==currentUser.getId()){
+                ord=true;
+                ui->orderList->insertRow(row);
+                ui->orderList->setItem(row, 0, new QTableWidgetItem(QString::number(order.getId())));
+                ui->orderList->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(order.getStatus())));
+                ++row;
+            }
+        }
+        if(ord==false){
+            ui->orderList->setRowCount(1);
+            ui->orderList->setItem(0, 0, new QTableWidgetItem("No orders"));
+            ui->orderList->setSpan(0, 0, 1, 3); // Span across all 3 columns
+        }
+
+        ui->orderList->resizeColumnsToContents();
+        ui->orderList->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    }
+
 }
 
-
+void userPage::onPaymentWindowDestroyed(){
+    if (order) {
+        delete order;
+        order = nullptr;
+    }
+    this->show();
+}
 
 
 void userPage::on_placeOrder_clicked()
 {
-    Payment *paymentWindow = new Payment(*order);  // parent is login
-    connect(paymentWindow, &Payment::destroyed, this, &userPage::show);  // show login when userPage is closed
+    Payment *paymentWindow = new Payment(*order);
     paymentWindow->show();
+    connect(paymentWindow, &Payment::destroyed, this, &userPage::onPaymentWindowDestroyed);
+    qDebug("destoy");
+    connect(paymentWindow, &Payment::destroyed, this, &userPage::show);
+    // Re-show this page
+
     this->hide();
 }
 
@@ -210,4 +226,3 @@ void userPage::on_logout_clicked()
 {
     delete this;
 }
-

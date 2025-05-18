@@ -12,6 +12,7 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTableWidget>
 #include <QtWidgets/QWidget>
@@ -26,6 +27,7 @@ public:
     QTableWidget *productList;
     QWidget *Orders;
     QTableWidget *orderList;
+    QPushButton *logout;
 
     void setupUi(QWidget *adminPage)
     {
@@ -47,6 +49,9 @@ public:
         orderList->setObjectName("orderList");
         orderList->setGeometry(QRect(10, 10, 1111, 461));
         tabWidget->addTab(Orders, QString());
+        logout = new QPushButton(adminPage);
+        logout->setObjectName("logout");
+        logout->setGeometry(QRect(1060, 20, 83, 29));
 
         retranslateUi(adminPage);
 
@@ -61,6 +66,7 @@ public:
         adminPage->setWindowTitle(QCoreApplication::translate("adminPage", "Form", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(Products), QCoreApplication::translate("adminPage", "Products", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(Orders), QCoreApplication::translate("adminPage", "Orders", nullptr));
+        logout->setText(QCoreApplication::translate("adminPage", "Logout", nullptr));
     } // retranslateUi
 
 };

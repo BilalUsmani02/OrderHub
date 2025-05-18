@@ -106,3 +106,9 @@ void adminPage::onItemChanged(QTableWidgetItem *item) {
 
 
 
+
+void adminPage::on_logout_clicked()
+{
+    delete this;
+}
+
