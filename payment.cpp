@@ -11,6 +11,7 @@ Payment::Payment(Order& order,QWidget *parent)
 
     Store* store = Store::getInstance();
 
+    qDebug() << "Login UI setup complete";
     ui->setupUi(this);
     hideAllPaymentFields();
     const auto& cart = ord.getCart();
@@ -127,7 +128,8 @@ void Payment::on_placeOrder_clicked()
     }
     ord.setPaymentMethod(payment);
     store->addOrder(ord);
-    QMessageBox::information(this, "Success", "Payment recorded, order placed.");
+    QString msg="Payment recorded, order placed.\n Order Id: "+QString::number(ord.getId());
+    QMessageBox::information(this, "Success", msg);
 
     emit deleteOrder();
     emit paymentCompleted();

@@ -17,7 +17,8 @@ class adminPage : public QWidget
 public:
     explicit adminPage(QWidget *parent = nullptr);
     void onItemChanged(QTableWidgetItem *item);
-
+    void populateProdList();
+    void populateOrdList();
     ~adminPage();
 
 private slots:
@@ -25,7 +26,10 @@ private slots:
 
     void on_logout_clicked();
 
+    void on_pushButton_clicked();
+
 private:
+    vector<Product>* prods;
     Ui::adminPage *ui;
 };
 

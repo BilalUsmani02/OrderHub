@@ -12,7 +12,45 @@ adminPage::adminPage(QWidget *parent)
     connect(ui->productList, &QTableWidget::itemChanged,
             this, &adminPage::onItemChanged);
 
+    populateProdList();
+    populateOrdList();
 
+
+}
+adminPage::~adminPage()
+{
+    delete ui;
+}
+
+
+void adminPage::onItemChanged(QTableWidgetItem *item) {
+    int row = item->row();
+    int col = item->column();
+    vector<Product>* prods = Store::getInstance()->allProducts();
+
+    if (row < 0 || row >= static_cast<int>(prods->size()))
+        return;
+
+    if (col == 0) { // Name edited
+        std::string newName = item->text().toStdString();
+        (*prods)[row].setName(newName);
+    } else if (col == 1) { // Price edited
+        bool ok;
+        float newPrice = item->text().toFloat(&ok);
+        if (ok) {
+            (*prods)[row].setPrice(newPrice);
+        } else {
+            QMessageBox::warning(this, "Invalid Input", "Please enter a valid price.");
+            ui->productList->blockSignals(true);
+            item->setText(QString::number((*prods)[row].getPrice(), 'f', 2));
+            ui->productList->blockSignals(false);
+        }
+    }
+}
+
+
+
+void adminPage::populateProdList(){
     vector<Product>* prods = Store::getInstance()->allProducts();
 
     if (prods->empty()) {
@@ -21,6 +59,8 @@ adminPage::adminPage(QWidget *parent)
         QTableWidgetItem* nameItem = new QTableWidgetItem("No Products");
         ui->productList->setItem(0, 0, nameItem);
     } else {
+        ui->productList->clear();
+        ui->productList->setRowCount(0);
         ui->productList->setColumnCount(2);
         QStringList headers;
         headers << "Name" << "Price" ;
@@ -41,10 +81,18 @@ adminPage::adminPage(QWidget *parent)
             ui->productList->setItem(i, 1, priceItem);
 
         }
+    }
+}
 
+void adminPage::populateOrdList(){
 
-        vector<Order>* orders = Store::getInstance()->allOrders();
-
+    vector<Order>* orders = Store::getInstance()->allOrders();
+    if (orders->empty()) {
+        ui->orderList->setColumnCount(1);
+        ui->orderList->insertRow(0);
+        QTableWidgetItem* nameItem = new QTableWidgetItem("No Products");
+        ui->orderList->setItem(0, 0, nameItem);
+    }else{
         // Clear existing rows
         ui->orderList->setRowCount(0);
 
@@ -54,9 +102,9 @@ adminPage::adminPage(QWidget *parent)
 
         // Check if orders list is empty
         if (orders->empty()) {
-        ui->orderList->setRowCount(1);
-        ui->orderList->setItem(0, 0, new QTableWidgetItem("No orders"));
-        ui->orderList->setSpan(0, 0, 1, 3); // Span across all 3 columns
+            ui->orderList->setRowCount(1);
+            ui->orderList->setItem(0, 0, new QTableWidgetItem("No orders"));
+            ui->orderList->setSpan(0, 0, 1, 3); // Span across all 3 columns
         }
 
         int row = 0;
@@ -94,45 +142,40 @@ adminPage::adminPage(QWidget *parent)
         ui->orderList->resizeColumnsToContents();  // Optional: Auto-resize columns
         ui->orderList->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-}
-}
-adminPage::~adminPage()
-{
-    delete ui;
-}
-
-
-void adminPage::onItemChanged(QTableWidgetItem *item) {
-    int row = item->row();
-    int col = item->column();
-    vector<Product>* prods = Store::getInstance()->allProducts();
-
-    if (row < 0 || row >= static_cast<int>(prods->size()))
-        return;
-
-    if (col == 0) { // Name edited
-        std::string newName = item->text().toStdString();
-        (*prods)[row].setName(newName);
-    } else if (col == 1) { // Price edited
-        bool ok;
-        float newPrice = item->text().toFloat(&ok);
-        if (ok) {
-            (*prods)[row].setPrice(newPrice);
-        } else {
-            QMessageBox::warning(this, "Invalid Input", "Please enter a valid price.");
-            ui->productList->blockSignals(true);
-            item->setText(QString::number((*prods)[row].getPrice(), 'f', 2));
-            ui->productList->blockSignals(false);
-        }
     }
 }
-
-
-
-
 
 void adminPage::on_logout_clicked()
 {
     delete this;
+}
+
+
+
+void adminPage::on_pushButton_clicked()
+{
+    vector<Product>* prods = Store::getInstance()->allProducts();
+    QString name = ui->pName->text().trimmed();
+    QString priceStr = ui->pPrice->text().trimmed();
+
+    if (name.isEmpty() || priceStr.isEmpty()) {
+        QMessageBox::warning(this, "Input Error", "Please fill both product name and price.");
+        return;
+    }
+
+    bool ok;
+    float price = priceStr.toFloat(&ok);
+    if (!ok || price < 0) {
+        QMessageBox::warning(this, "Invalid Price", "Please enter a valid, non-negative price.");
+        return;
+    }
+
+    Product newProduct(name.toStdString(), price);
+    prods->push_back(newProduct);
+    populateProdList();
+
+    ui->pName->setText("");
+    ui->pPrice->setText("");
+    QMessageBox::information(this, "Product Added", "Product Added Successfully");
 }
 

@@ -4,7 +4,13 @@
 #include <fstream>
 using namespace std;
 
+int Product::nextId=1;
 
+Product::Product(string n, float p){
+    id=nextId++;
+    name=n;
+    price=p;
+}
 Product::Product(int i,string n, float p){
     id=i;
     name=n;
@@ -20,12 +26,17 @@ float Product::getPrice()const{return price;	}
 void Product::display()const{
     cout<<"Name: "<<name<<endl<<"Price per unit: "<<price<<endl;
 }
-
+int OrderItem::getId() const {
+    return Product::getId(); // Or return the internal id
+}
 void OrderItem::setQuantity(int q) {
     this->quantity = q;
 }
-
 OrderItem::OrderItem(int i,string n,float p, int q): Product(i,n,p), quantity(q){
+
+}
+OrderItem::OrderItem(string n,float p, int q): Product(n,p), quantity(q){
+
 }
 
 int OrderItem::getQuantity()const{return quantity;}
@@ -123,17 +134,18 @@ void Order::setPaymentMethod(PaymentMethod* pm){
 void Order::addItem(OrderItem item){
     cart.push_back(item);
 }
-void Order::addItem(const Product& product, int quantity) {
-    for (auto& item : cart) {
-        if (item.Product::getId() == product.getId()) {
-            item.setQuantity(item.getQuantity() + quantity);
-            return;
+
+void Order::addItemToCart(OrderItem item){
+    bool present=false;
+    for (auto& i : cart) {
+        if (item.getId() == i.getId()) {
+            present=true;
+            i.setQuantity(item.getQuantity() + i.getQuantity());
         }
     }
-
-    // If not found, add as new
-    OrderItem temp(product.getId(),product.getName(),product.getPrice(),quantity);
-    cart.emplace_back(temp);
+    if(present==false){
+        cart.push_back(item);
+    }
 }
 
 void Order::decreaseQuantity(int productId) {
@@ -144,6 +156,16 @@ void Order::decreaseQuantity(int productId) {
                 cart.erase(it);
             else
                 it->setQuantity(newQty);
+            return;
+        }
+    }
+}
+
+void Order::increaseQuantity(int productId) {
+    for (auto it = cart.begin(); it != cart.end(); ++it) {
+        if (it->Product::getId() == productId) {
+            int newQty = it->getQuantity() + 1;
+            it->setQuantity(newQty);
             return;
         }
     }
@@ -316,7 +338,7 @@ void Store::addOrder(Order o){orders.push_back(o);}
 void Store::editProduct(int id, const string& newName, float newPrice) {
     for (auto& p : products) {
         if (p.getId() == id) {
-            p = Product(id, newName, newPrice);
+            p = Product(newName, newPrice);
             break;
         }
     }
@@ -418,7 +440,7 @@ void Store::trackOrder(int orderId){
         getline(cin,name);
         cout<<"Enter Price: ";
         cin>>price;
-        store.addProduct(Product(id,name,price));
+        store.addProduct(Product(name,price));
         cout<<"Product added!\n";
     }
     void Admin::editProduct(Store& store){

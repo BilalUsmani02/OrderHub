@@ -9,11 +9,13 @@
 using namespace std;
 
 class Product{
+    static int nextId;
     int id;
     string name;
     float price;
 public:
-    Product(int i=0,string n="", float p=0);
+    Product(string n="", float p=0);
+    Product(int i,string n, float p);
     void setName(string n);
     void setPrice(float p);
     int getId()const;
@@ -22,13 +24,15 @@ public:
     virtual void display()const;
 };
 
+
 class OrderItem: public Product{
     int quantity;
 public:
-    OrderItem(int i=0,string n="",float p=0, int q=0);
-
+    OrderItem(string n="",float p=0, int q=0);
+    OrderItem(int i,string n,float p, int q);
     int getQuantity()const;
     float totalPrice()const;
+    int getId() const;
     void display() const;
     void setQuantity(int q);
 };
@@ -96,6 +100,7 @@ public:
     string getPaymentMethod() const;
     void removeItem(int productId);
     void decreaseQuantity(int productId);
+    void increaseQuantity(int productId);
     void setStatus(string stat);
     void setPaymentMethod(PaymentMethod* pm);
     void addItem(const Product& product, int quantity);    
@@ -103,6 +108,7 @@ public:
     void addItem(OrderItem item);
     float calculateTotalPrice() const;
     void display() const;
+    void addItemToCart(OrderItem item);
 };
 
 
