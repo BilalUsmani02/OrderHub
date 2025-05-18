@@ -12,7 +12,7 @@ class userPage : public QWidget
     Q_OBJECT
 
 public:
-    explicit userPage(QWidget *parent = nullptr);
+    explicit userPage(User& user,QWidget *parent = nullptr);
     ~userPage();
 
 signals:
@@ -24,7 +24,7 @@ private slots:
 
 private:
     Ui::userPage *ui;
-    User user{1,"Bilal"};
+    User user{"Bilal"};
     Order* order=nullptr;
     void populateCartTable(const Order& ord);
 };

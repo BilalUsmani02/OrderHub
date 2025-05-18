@@ -6,7 +6,7 @@
 #include <QLabel>
 #include <QString>
 
-userPage::userPage(QWidget *parent): QWidget(parent), ui(new Ui::userPage){
+userPage::userPage(User& user,QWidget *parent): QWidget(parent), ui(new Ui::userPage){
 
     ui->setupUi(this);
     this->show();

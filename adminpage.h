@@ -17,7 +17,7 @@ class adminPage : public QWidget
 public:
     explicit adminPage(QWidget *parent = nullptr);
     void onItemChanged(QTableWidgetItem *item);
-    void populateTable();
+
     ~adminPage();
 
 private slots:

@@ -148,10 +148,13 @@ public:
 };
 
 class User{
-    static int id;
+
+    int id;
     string name;
 public:
-    User(int i=0, string n="");
+    static int nextUid;
+    User( string n="");
+    User(int i,string n="");
     int getId() const;
     string getName() const;
     void viewProducts(Store& store);

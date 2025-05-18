@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="Products">
     <attribute name="title">
@@ -44,6 +44,16 @@
     <attribute name="title">
      <string>Orders</string>
     </attribute>
+    <widget class="QTableWidget" name="orderList">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>1111</width>
+       <height>461</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
   </widget>
  </widget>
