@@ -21,9 +21,13 @@ void Product::display()const{
     cout<<"Name: "<<name<<endl<<"Price per unit: "<<price<<endl;
 }
 
+void OrderItem::setQuantity(int q) {
+    this->quantity = q;
+}
 
 OrderItem::OrderItem(int i,string n,float p, int q): Product(i,n,p), quantity(q){
 }
+
 int OrderItem::getQuantity()const{return quantity;}
 float OrderItem::totalPrice()const{return getPrice()*quantity;}
 void OrderItem::display() const{
@@ -119,6 +123,39 @@ void Order::setPaymentMethod(PaymentMethod* pm){
 void Order::addItem(OrderItem item){
     cart.push_back(item);
 }
+void Order::addItem(const Product& product, int quantity) {
+    for (auto& item : cart) {
+        if (item.Product::getId() == product.getId()) {
+            item.setQuantity(item.getQuantity() + quantity);
+            return;
+        }
+    }
+
+    // If not found, add as new
+    OrderItem temp(product.getId(),product.getName(),product.getPrice(),quantity);
+    cart.emplace_back(temp);
+}
+
+void Order::decreaseQuantity(int productId) {
+    for (auto it = cart.begin(); it != cart.end(); ++it) {
+        if (it->Product::getId() == productId) {
+            int newQty = it->getQuantity() - 1;
+            if (newQty <= 0)
+                cart.erase(it);
+            else
+                it->setQuantity(newQty);
+            return;
+        }
+    }
+}
+
+
+void Order::removeItem(int productId) {
+    cart.erase(std::remove_if(cart.begin(), cart.end(),
+                              [=](const OrderItem& item) { return item.Product::getId() == productId; }),
+               cart.end());
+}
+
 float Order::calculateTotalPrice() const{
     float total=0;
     for(const auto& item : cart){

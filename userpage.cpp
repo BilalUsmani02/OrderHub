@@ -96,9 +96,10 @@ void userPage::populateCartTable(const Order& ord)
     const auto& cart = ord.getCart();
     ui->cartList->clear();
     ui->cartList->setRowCount(0);
-    ui->cartList->setColumnCount(4);
+    ui->cartList->setColumnCount(5);
     ui->cartList->setHorizontalHeaderLabels(
-        {"Name","Unit Price","Qty","Sub-total"});
+        {"Name", "Unit Price", "Qty", "Sub-total", "Remove"});
+
     ui->cartList->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     for (int i = 0; i < static_cast<int>(cart.size()); ++i) {
@@ -110,7 +111,6 @@ void userPage::populateCartTable(const Order& ord)
         QTableWidgetItem* qtyItem = new QTableWidgetItem(QString::number(it.getQuantity()));
         QTableWidgetItem* subtotalItem = new QTableWidgetItem(QString::number(it.totalPrice(), 'f', 2));
 
-        // Make them all non-editable
         nameItem->setFlags(nameItem->flags() & ~Qt::ItemIsEditable);
         priceItem->setFlags(priceItem->flags() & ~Qt::ItemIsEditable);
         qtyItem->setFlags(qtyItem->flags() & ~Qt::ItemIsEditable);
@@ -120,7 +120,29 @@ void userPage::populateCartTable(const Order& ord)
         ui->cartList->setItem(i, 1, priceItem);
         ui->cartList->setItem(i, 2, qtyItem);
         ui->cartList->setItem(i, 3, subtotalItem);
+
+        // --- Add minus button ---
+        QPushButton* minusBtn = new QPushButton("-");
+        ui->cartList->setCellWidget(i, 4, minusBtn);
+
+        // Capture necessary values for lambda
+        connect(minusBtn, &QPushButton::clicked, this, [=]() {
+            int currentQty = it.getQuantity();
+            int productId = it.Product::getId();
+
+            if (currentQty > 1) {
+                order->decreaseQuantity(productId);  // implement this method in Order class
+            } else {
+                order->removeItem(productId);        // implement this method in Order class
+            }
+
+            populateCartTable(*order);  // refresh the table
+            ui->cartList->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+            // or: resizeColumnsToContents() for automatic adjustment
+
+        });
     }
+
 
 
     QString oTotal = QString::number(order->calculateTotalPrice(), 'f', 2); // 2-decimal formatting

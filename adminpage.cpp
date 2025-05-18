@@ -2,6 +2,7 @@
 #include "ui_adminpage.h"
 #include <QTableWidgetItem>
 #include <QMessageBox>
+#include <QComboBox>
 
 adminPage::adminPage(QWidget *parent)
     : QWidget(parent)
@@ -61,14 +62,37 @@ adminPage::adminPage(QWidget *parent)
         int row = 0;
         for (const auto& order : *orders) {
             ui->orderList->insertRow(row);
-            ui->orderList->setItem(row, 0, new QTableWidgetItem(QString::number(order.getId())));
-            ui->orderList->setItem(row, 1, new QTableWidgetItem(QString::number(order.getUserId())));
-            ui->orderList->setItem(row, 2, new QTableWidgetItem(QString::fromStdString(order.getStatus())));
+            QTableWidgetItem* idItem = new QTableWidgetItem(QString::number(order.getId()));
+            idItem->setFlags(idItem->flags() & ~Qt::ItemIsEditable);
+            ui->orderList->setItem(row, 0, idItem);
+
+            QTableWidgetItem* userItem = new QTableWidgetItem(QString::number(order.getUserId()));
+            userItem->setFlags(userItem->flags() & ~Qt::ItemIsEditable);
+            ui->orderList->setItem(row, 1, userItem);
+
+            QComboBox* statusCombo = new QComboBox();
+            statusCombo->addItems({"Pending", "Accepted", "In Transit", "Shipped"});
+
+            // Set current value
+            int index = statusCombo->findText(QString::fromStdString(order.getStatus()));
+            statusCombo->setCurrentIndex(index == -1 ? 0 : index);  // default to "Pending" if not found
+
+            // Set the combo box in the cell
+            ui->orderList->setCellWidget(row, 2, statusCombo);
+
+            // Capture the row index in the lambda
+            connect(statusCombo, &QComboBox::currentTextChanged, this, [=](const QString &newStatus) {
+                vector<Order>* orders = Store::getInstance()->allOrders();
+                if (row >= 0 && row < static_cast<int>(orders->size())) {
+                    (*orders)[row].setStatus(newStatus.toStdString());
+                }
+            });
+
             ++row;
         }
 
         ui->orderList->resizeColumnsToContents();  // Optional: Auto-resize columns
-
+        ui->orderList->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
 }
 }

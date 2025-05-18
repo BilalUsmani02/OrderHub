@@ -26,9 +26,11 @@ class OrderItem: public Product{
     int quantity;
 public:
     OrderItem(int i=0,string n="",float p=0, int q=0);
+
     int getQuantity()const;
     float totalPrice()const;
     void display() const;
+    void setQuantity(int q);
 };
 
 class PaymentMethod{
@@ -92,10 +94,11 @@ public:
     int getUserId() const;
     string getStatus() const ;
     string getPaymentMethod() const;
-
+    void removeItem(int productId);
+    void decreaseQuantity(int productId);
     void setStatus(string stat);
     void setPaymentMethod(PaymentMethod* pm);
-
+    void addItem(const Product& product, int quantity);
     void addItem(OrderItem item);
     float calculateTotalPrice() const;
     void display() const;
