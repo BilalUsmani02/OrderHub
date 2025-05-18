@@ -2,6 +2,9 @@
 #define ADMINPAGE_H
 
 #include <QWidget>
+#include<QTableWidgetItem>
+#include "store.h"
+#include <vector>
 
 namespace Ui {
 class adminPage;
@@ -13,7 +16,12 @@ class adminPage : public QWidget
 
 public:
     explicit adminPage(QWidget *parent = nullptr);
+    void onItemChanged(QTableWidgetItem *item);
+    void populateTable();
     ~adminPage();
+
+private slots:
+
 
 private:
     Ui::adminPage *ui;

@@ -23,7 +23,7 @@ class Ui_adminPage
 public:
     QTabWidget *tabWidget;
     QWidget *Products;
-    QTableWidget *tableWidget;
+    QTableWidget *productList;
     QWidget *Orders;
 
     void setupUi(QWidget *adminPage)
@@ -36,9 +36,9 @@ public:
         tabWidget->setGeometry(QRect(20, 50, 1141, 521));
         Products = new QWidget();
         Products->setObjectName("Products");
-        tableWidget = new QTableWidget(Products);
-        tableWidget->setObjectName("tableWidget");
-        tableWidget->setGeometry(QRect(10, 10, 1121, 461));
+        productList = new QTableWidget(Products);
+        productList->setObjectName("productList");
+        productList->setGeometry(QRect(10, 10, 1121, 461));
         tabWidget->addTab(Products, QString());
         Orders = new QWidget();
         Orders->setObjectName("Orders");
