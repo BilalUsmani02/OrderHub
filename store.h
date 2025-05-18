@@ -95,7 +95,7 @@ public:
 
     void setStatus(string stat);
     void setPaymentMethod(PaymentMethod* pm);
-
+    void clearOrder();
     void addItem(OrderItem item);
     float calculateTotalPrice() const;
     void display() const;

@@ -215,6 +215,11 @@ vector<Order>* Store::allOrders() {
     return &orders;
 }
 
+void Order::clearOrder(){
+    cart.clear();
+    orderId=nextId++;
+}
+
 Store::~Store(){
     saveProducts();
     saveOrders();

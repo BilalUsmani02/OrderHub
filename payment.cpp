@@ -129,11 +129,10 @@ void Payment::on_placeOrder_clicked()
     store->addOrder(ord);
     QMessageBox::information(this, "Success", "Payment recorded, order placed.");
 
+    emit deleteOrder();
     emit paymentCompleted();
 }
 
 void Payment::onPaymentCompleted() {
     delete this;
 }
-
-

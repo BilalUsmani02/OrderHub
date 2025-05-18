@@ -7,7 +7,7 @@
 #include <QLabel>
 #include <QString>
 
-userPage::userPage(User& user,QWidget *parent): QWidget(parent), ui(new Ui::userPage),currentUser(user.getId(),user.getName()){
+userPage::userPage(User& user,QWidget *parent): QWidget(parent), ui(new Ui::userPage),currentUser(user.getId(),user.getName()),order(currentUser.getId()){
 
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
@@ -77,12 +77,9 @@ userPage::userPage(User& user,QWidget *parent): QWidget(parent), ui(new Ui::user
 
             connect(addButton, &QPushButton::clicked, this, [=]() {
                 int quantity = qtyLabel->text().toInt();
-                if (!order){
-                    order=new Order(user.getId());
-                }
 
                 OrderItem item(product.getId(),product.getName(),product.getPrice(),quantity);
-                order->addItem(item);
+                order.addItem(item);
 
             });
 
@@ -123,7 +120,7 @@ void userPage::populateCartTable(const Order& ord)
     }
 
 
-    QString oTotal = QString::number(order->calculateTotalPrice(), 'f', 2); // 2-decimal formatting
+    QString oTotal = QString::number(order.calculateTotalPrice(), 'f', 2); // 2-decimal formatting
     ui->orderTotal->setText(oTotal);
 
 }
@@ -138,6 +135,7 @@ userPage::~userPage()
 
 void userPage::on_tabWidget_tabBarClicked(int index)
 {
+    qDebug("yoo");
     ui->orderTotal->hide();
     ui->label->hide();
     ui->placeOrder->hide();
@@ -145,8 +143,8 @@ void userPage::on_tabWidget_tabBarClicked(int index)
     const int productTabIndex =0;
     const int cartTabIndex = 2;
 
-    if (index == cartTabIndex &&  order) {
-        populateCartTable(*order);
+    if (index == cartTabIndex ) {
+        populateCartTable(order);
         ui->orderTotal->show();
         ui->label->show();
         ui->placeOrder->show();
@@ -198,9 +196,9 @@ void userPage::on_tabWidget_tabBarClicked(int index)
 
 void userPage::on_placeOrder_clicked()
 {
-    Payment *paymentWindow = new Payment(*order);
+    Payment *paymentWindow = new Payment(order);
     connect(paymentWindow, &Payment::destroyed, this, &userPage::show);
-    connect(paymentWindow, &Payment::paymentCompleted, this, &userPage::onPaymentFinished);
+    connect(paymentWindow, &Payment::deleteOrder, this, &userPage::onPaymentFinished);
     paymentWindow->show();
     this->hide();
 
@@ -208,10 +206,8 @@ void userPage::on_placeOrder_clicked()
 }
 
 void userPage::onPaymentFinished() {
-    if (order) {
-        delete order;
-        order = nullptr;
-    }
+    qDebug("yh ho rha hy");
+    order.clearOrder();
 
 }
 

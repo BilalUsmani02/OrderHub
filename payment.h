@@ -19,6 +19,7 @@ public:
 signals:
     void orderPlacedSuccessfully();
     void paymentCompleted();
+    void deleteOrder();
 public slots:
     void onPaymentCompleted();
 

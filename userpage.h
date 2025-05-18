@@ -29,7 +29,7 @@ private slots:
 private:
     Ui::userPage *ui;
     User currentUser;
-    Order* order=nullptr;
+    Order order;
     void populateCartTable(const Order& ord);
     vector<Product>* prods;
 };

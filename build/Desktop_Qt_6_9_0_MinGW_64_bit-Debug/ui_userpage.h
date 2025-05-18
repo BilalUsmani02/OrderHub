@@ -80,7 +80,7 @@ public:
 
         retranslateUi(userPage);
 
-        tabWidget->setCurrentIndex(1);
+        tabWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(userPage);
