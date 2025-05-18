@@ -12,6 +12,8 @@ Product::Product(int i,string n, float p){
     price=p;
 }
 void Product::setName(string n){name=n;}
+
+
 void Product::setPrice(float p){price=p;}
 int Product::getId()const{return id;	}
 string Product::getName()const{return name;	}
