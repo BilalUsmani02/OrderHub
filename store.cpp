@@ -6,7 +6,7 @@
 using namespace std;
 
 
-Product::Product(int i, string n, float p){
+Product::Product(int i,string n, float p){
     id=i;
     name=n;
     price=p;
@@ -21,7 +21,7 @@ void Product::display()const{
 }
 
 
-OrderItem::OrderItem(int i, string n,float p, int q): Product(i,n,p), quantity(q){
+OrderItem::OrderItem(int i,string n,float p, int q): Product(i,n,p), quantity(q){
 }
 int OrderItem::getQuantity()const{return quantity;}
 float OrderItem::totalPrice()const{return getPrice()*quantity;}

@@ -25,6 +25,7 @@ public:
     QWidget *Products;
     QTableWidget *productList;
     QWidget *Orders;
+    QWidget *Cart;
 
     void setupUi(QWidget *userPage)
     {
@@ -34,6 +35,8 @@ public:
         tabWidget = new QTabWidget(userPage);
         tabWidget->setObjectName("tabWidget");
         tabWidget->setGeometry(QRect(10, 60, 1141, 521));
+        tabWidget->setTabPosition(QTabWidget::TabPosition::North);
+        tabWidget->setTabShape(QTabWidget::TabShape::Rounded);
         Products = new QWidget();
         Products->setObjectName("Products");
         productList = new QTableWidget(Products);
@@ -43,6 +46,9 @@ public:
         Orders = new QWidget();
         Orders->setObjectName("Orders");
         tabWidget->addTab(Orders, QString());
+        Cart = new QWidget();
+        Cart->setObjectName("Cart");
+        tabWidget->addTab(Cart, QString());
 
         retranslateUi(userPage);
 
@@ -57,6 +63,7 @@ public:
         userPage->setWindowTitle(QCoreApplication::translate("userPage", "Form", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(Products), QCoreApplication::translate("userPage", "Products", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(Orders), QCoreApplication::translate("userPage", "Orders", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(Cart), QCoreApplication::translate("userPage", "Cart", nullptr));
     } // retranslateUi
 
 };

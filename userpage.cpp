@@ -77,6 +77,7 @@ userPage::userPage(QWidget *parent): QWidget(parent), ui(new Ui::userPage){
 
             connect(addButton, &QPushButton::clicked, this, [=]() {
                 int quantity = qtyLabel->text().toInt();
+                if ()
 
             });
         }

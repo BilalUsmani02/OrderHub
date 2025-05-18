@@ -13,7 +13,7 @@ class Product{
     string name;
     float price;
 public:
-    Product(int i=0, string n="", float p=0);
+    Product(int i=0,string n="", float p=0);
     void setName(string n);
     void setPrice(float p);
     int getId()const;
@@ -25,7 +25,7 @@ public:
 class OrderItem: public Product{
     int quantity;
 public:
-    OrderItem(int i=0, string n="",float p=0, int q=0);
+    OrderItem(int i=0,string n="",float p=0, int q=0);
     int getQuantity()const;
     float totalPrice()const;
     void display() const;
