@@ -7,6 +7,8 @@ Payment::Payment(Order& order,QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Payment),ord(order),store(Store::getInstance())
 {
+    connect(this, &Payment::paymentCompleted, this, &Payment::onPaymentCompleted);
+
     Store* store = Store::getInstance();
 
     ui->setupUi(this);
@@ -126,8 +128,12 @@ void Payment::on_placeOrder_clicked()
     ord.setPaymentMethod(payment);
     store->addOrder(ord);
     QMessageBox::information(this, "Success", "Payment recorded, order placed.");
-    qDebug("Here");
-    emit paymentCompleted();  // Add this line
-    this->close();            // Then close
-    qDebug("closed");
+
+    emit paymentCompleted();
 }
+
+void Payment::onPaymentCompleted() {
+    delete this;
+}
+
+

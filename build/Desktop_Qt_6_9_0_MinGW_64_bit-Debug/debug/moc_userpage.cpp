@@ -42,11 +42,11 @@ template <> constexpr inline auto userPage::qt_create_metaobjectdata<qt_meta_tag
         "cartUpdated",
         "",
         "Order",
+        "onPaymentFinished",
         "on_tabWidget_tabBarClicked",
         "index",
         "on_placeOrder_clicked",
-        "on_logout_clicked",
-        "onPaymentWindowDestroyed"
+        "on_logout_clicked"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -54,15 +54,15 @@ template <> constexpr inline auto userPage::qt_create_metaobjectdata<qt_meta_tag
         QtMocHelpers::SignalData<void(const Order &)>(1, 2, QMC::AccessPublic, QMetaType::Void, {{
             { 0x80000000 | 3, 2 },
         }}),
+        // Slot 'onPaymentFinished'
+        QtMocHelpers::SlotData<void()>(4, 2, QMC::AccessPublic, QMetaType::Void),
         // Slot 'on_tabWidget_tabBarClicked'
-        QtMocHelpers::SlotData<void(int)>(4, 2, QMC::AccessPrivate, QMetaType::Void, {{
-            { QMetaType::Int, 5 },
+        QtMocHelpers::SlotData<void(int)>(5, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { QMetaType::Int, 6 },
         }}),
         // Slot 'on_placeOrder_clicked'
-        QtMocHelpers::SlotData<void()>(6, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'on_logout_clicked'
         QtMocHelpers::SlotData<void()>(7, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'onPaymentWindowDestroyed'
+        // Slot 'on_logout_clicked'
         QtMocHelpers::SlotData<void()>(8, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
@@ -88,10 +88,10 @@ void userPage::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
         case 0: _t->cartUpdated((*reinterpret_cast< std::add_pointer_t<Order>>(_a[1]))); break;
-        case 1: _t->on_tabWidget_tabBarClicked((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 2: _t->on_placeOrder_clicked(); break;
-        case 3: _t->on_logout_clicked(); break;
-        case 4: _t->onPaymentWindowDestroyed(); break;
+        case 1: _t->onPaymentFinished(); break;
+        case 2: _t->on_tabWidget_tabBarClicked((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 3: _t->on_placeOrder_clicked(); break;
+        case 4: _t->on_logout_clicked(); break;
         default: ;
         }
     }

@@ -17,13 +17,14 @@ public:
 
 signals:
     void cartUpdated(const Order&);
+public slots:
+    void onPaymentFinished(); // Slot to handle payment completion
 
 
 private slots:
     void on_tabWidget_tabBarClicked(int index);
     void on_placeOrder_clicked();
     void on_logout_clicked();
-    void onPaymentWindowDestroyed();
 
 private:
     Ui::userPage *ui;

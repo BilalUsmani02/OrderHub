@@ -131,10 +131,6 @@ void userPage::populateCartTable(const Order& ord)
 
 userPage::~userPage()
 {
-    if (order) {
-        delete order;
-        order = nullptr;
-    }
     delete ui;
 }
 
@@ -199,25 +195,24 @@ void userPage::on_tabWidget_tabBarClicked(int index)
 
 }
 
-void userPage::onPaymentWindowDestroyed(){
-    if (order) {
-        delete order;
-        order = nullptr;
-    }
-    this->show();
-}
-
 
 void userPage::on_placeOrder_clicked()
 {
     Payment *paymentWindow = new Payment(*order);
-    paymentWindow->show();
-    connect(paymentWindow, &Payment::destroyed, this, &userPage::onPaymentWindowDestroyed);
-    qDebug("destoy");
     connect(paymentWindow, &Payment::destroyed, this, &userPage::show);
-    // Re-show this page
-
+    connect(paymentWindow, &Payment::paymentCompleted, this, &userPage::onPaymentFinished);
+    paymentWindow->show();
     this->hide();
+
+
+}
+
+void userPage::onPaymentFinished() {
+    if (order) {
+        delete order;
+        order = nullptr;
+    }
+
 }
 
 

@@ -18,9 +18,9 @@ public:
     void hideAllPaymentFields();
 signals:
     void orderPlacedSuccessfully();
-signals:
     void paymentCompleted();
-
+public slots:
+    void onPaymentCompleted();
 
 private slots:
     void on_paymentType_currentIndexChanged(int index);

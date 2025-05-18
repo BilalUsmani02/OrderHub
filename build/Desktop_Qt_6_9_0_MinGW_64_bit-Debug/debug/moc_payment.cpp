@@ -41,6 +41,8 @@ template <> constexpr inline auto Payment::qt_create_metaobjectdata<qt_meta_tag_
         "Payment",
         "orderPlacedSuccessfully",
         "",
+        "paymentCompleted",
+        "onPaymentCompleted",
         "on_paymentType_currentIndexChanged",
         "index",
         "on_placeOrder_clicked"
@@ -49,12 +51,16 @@ template <> constexpr inline auto Payment::qt_create_metaobjectdata<qt_meta_tag_
     QtMocHelpers::UintData qt_methods {
         // Signal 'orderPlacedSuccessfully'
         QtMocHelpers::SignalData<void()>(1, 2, QMC::AccessPublic, QMetaType::Void),
+        // Signal 'paymentCompleted'
+        QtMocHelpers::SignalData<void()>(3, 2, QMC::AccessPublic, QMetaType::Void),
+        // Slot 'onPaymentCompleted'
+        QtMocHelpers::SlotData<void()>(4, 2, QMC::AccessPublic, QMetaType::Void),
         // Slot 'on_paymentType_currentIndexChanged'
-        QtMocHelpers::SlotData<void(int)>(3, 2, QMC::AccessPrivate, QMetaType::Void, {{
-            { QMetaType::Int, 4 },
+        QtMocHelpers::SlotData<void(int)>(5, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { QMetaType::Int, 6 },
         }}),
         // Slot 'on_placeOrder_clicked'
-        QtMocHelpers::SlotData<void()>(5, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(7, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -79,13 +85,17 @@ void Payment::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
         case 0: _t->orderPlacedSuccessfully(); break;
-        case 1: _t->on_paymentType_currentIndexChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 2: _t->on_placeOrder_clicked(); break;
+        case 1: _t->paymentCompleted(); break;
+        case 2: _t->onPaymentCompleted(); break;
+        case 3: _t->on_paymentType_currentIndexChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 4: _t->on_placeOrder_clicked(); break;
         default: ;
         }
     }
     if (_c == QMetaObject::IndexOfMethod) {
         if (QtMocHelpers::indexOfMethod<void (Payment::*)()>(_a, &Payment::orderPlacedSuccessfully, 0))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (Payment::*)()>(_a, &Payment::paymentCompleted, 1))
             return;
     }
 }
@@ -109,14 +119,14 @@ int Payment::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 3)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 3;
+        _id -= 5;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 3)
+        if (_id < 5)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 3;
+        _id -= 5;
     }
     return _id;
 }
@@ -125,5 +135,11 @@ int Payment::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 void Payment::orderPlacedSuccessfully()
 {
     QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
+}
+
+// SIGNAL 1
+void Payment::paymentCompleted()
+{
+    QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
 }
 QT_WARNING_POP
