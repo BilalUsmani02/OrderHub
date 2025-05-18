@@ -15,8 +15,17 @@ public:
     explicit userPage(QWidget *parent = nullptr);
     ~userPage();
 
+signals:
+    void cartUpdated(const Order&);
+
+
+private slots:
+    void on_tabWidget_tabBarClicked(int index);
+
 private:
     Ui::userPage *ui;
+    User user{1,"Bilal"};
+    Order* order=nullptr;
+    void populateCartTable(const Order& ord);
 };
-
 #endif // USERPAGE_H

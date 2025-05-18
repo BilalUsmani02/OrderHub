@@ -4,11 +4,9 @@
 #include <QMessageBox>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QString>
 
 userPage::userPage(QWidget *parent): QWidget(parent), ui(new Ui::userPage){
-
-    User user;
-    Order order(user.getId());
 
     ui->setupUi(this);
     this->show();
@@ -77,16 +75,67 @@ userPage::userPage(QWidget *parent): QWidget(parent), ui(new Ui::userPage){
 
             connect(addButton, &QPushButton::clicked, this, [=]() {
                 int quantity = qtyLabel->text().toInt();
-                if ()
+                if (!order){
+                    order=new Order(user.getId());
+                }
 
+                OrderItem item(product.getId(),product.getName(),product.getPrice(),quantity);
+                order->addItem(item);
             });
         }
     }
 }
 
+
+void userPage::populateCartTable(const Order& ord)
+{
+    const auto& cart = ord.getCart();
+
+    ui->cartList->clear();
+    ui->cartList->setRowCount(0);
+    ui->cartList->setColumnCount(4);
+    ui->cartList->setHorizontalHeaderLabels(
+        {"Name","Unit Price","Qty","Sub-total"});
+    ui->cartList->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    for (int i = 0; i < static_cast<int>(cart.size()); ++i) {
+        const OrderItem& it = cart[i];
+        ui->cartList->insertRow(i);
+        ui->cartList->setItem(i,0,new QTableWidgetItem(QString::fromStdString(it.getName())));
+        ui->cartList->setItem(i,1,new QTableWidgetItem(QString::number(it.getPrice(),'f',2)));
+        ui->cartList->setItem(i,2,new QTableWidgetItem(QString::number(it.getQuantity())));
+        ui->cartList->setItem(i,3,new QTableWidgetItem(QString::number(it.totalPrice(),'f',2)));
+    }
+
+    QString oTotal = QString::number(order->calculateTotalPrice(), 'f', 2); // 2-decimal formatting
+    ui->orderTotal->setText(oTotal);
+
+}
+
+
+
+
 userPage::~userPage()
 {
     delete ui;
 }
+
+
+
+void userPage::on_tabWidget_tabBarClicked(int index)
+{
+
+    const int productTabIndex =1;
+    const int cartTabIndex = 2;
+
+    if (index == cartTabIndex &&  order) {
+        populateCartTable(*order);
+    }else{
+        ui->orderTotal->hide();
+        ui->label->hide();
+        ui->placeOrder->hide();
+    }
+}
+
 
 

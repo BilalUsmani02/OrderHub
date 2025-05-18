@@ -12,6 +12,9 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTableWidget>
 #include <QtWidgets/QWidget>
@@ -26,6 +29,10 @@ public:
     QTableWidget *productList;
     QWidget *Orders;
     QWidget *Cart;
+    QTableWidget *cartList;
+    QLabel *label;
+    QLineEdit *orderTotal;
+    QPushButton *placeOrder;
 
     void setupUi(QWidget *userPage)
     {
@@ -48,11 +55,24 @@ public:
         tabWidget->addTab(Orders, QString());
         Cart = new QWidget();
         Cart->setObjectName("Cart");
+        cartList = new QTableWidget(Cart);
+        cartList->setObjectName("cartList");
+        cartList->setGeometry(QRect(20, 20, 1101, 411));
+        label = new QLabel(Cart);
+        label->setObjectName("label");
+        label->setGeometry(QRect(660, 450, 63, 20));
+        orderTotal = new QLineEdit(Cart);
+        orderTotal->setObjectName("orderTotal");
+        orderTotal->setGeometry(QRect(730, 450, 113, 28));
+        orderTotal->setReadOnly(true);
+        placeOrder = new QPushButton(Cart);
+        placeOrder->setObjectName("placeOrder");
+        placeOrder->setGeometry(QRect(1020, 440, 91, 29));
         tabWidget->addTab(Cart, QString());
 
         retranslateUi(userPage);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(userPage);
@@ -63,6 +83,9 @@ public:
         userPage->setWindowTitle(QCoreApplication::translate("userPage", "Form", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(Products), QCoreApplication::translate("userPage", "Products", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(Orders), QCoreApplication::translate("userPage", "Orders", nullptr));
+        label->setText(QCoreApplication::translate("userPage", "Total   =", nullptr));
+        orderTotal->setText(QCoreApplication::translate("userPage", "0", nullptr));
+        placeOrder->setText(QCoreApplication::translate("userPage", "Place Order", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(Cart), QCoreApplication::translate("userPage", "Cart", nullptr));
     } // retranslateUi
 
