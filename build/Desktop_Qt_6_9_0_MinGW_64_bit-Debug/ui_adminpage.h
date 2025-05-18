@@ -1,0 +1,70 @@
+/********************************************************************************
+** Form generated from reading UI file 'adminpage.ui'
+**
+** Created by: Qt User Interface Compiler version 6.9.0
+**
+** WARNING! All changes made in this file will be lost when recompiling UI file!
+********************************************************************************/
+
+#ifndef UI_ADMINPAGE_H
+#define UI_ADMINPAGE_H
+
+#include <QtCore/QVariant>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QTabWidget>
+#include <QtWidgets/QTableWidget>
+#include <QtWidgets/QWidget>
+
+QT_BEGIN_NAMESPACE
+
+class Ui_adminPage
+{
+public:
+    QTabWidget *tabWidget;
+    QWidget *Products;
+    QTableWidget *tableWidget;
+    QWidget *Orders;
+
+    void setupUi(QWidget *adminPage)
+    {
+        if (adminPage->objectName().isEmpty())
+            adminPage->setObjectName("adminPage");
+        adminPage->resize(1178, 589);
+        tabWidget = new QTabWidget(adminPage);
+        tabWidget->setObjectName("tabWidget");
+        tabWidget->setGeometry(QRect(20, 50, 1141, 521));
+        Products = new QWidget();
+        Products->setObjectName("Products");
+        tableWidget = new QTableWidget(Products);
+        tableWidget->setObjectName("tableWidget");
+        tableWidget->setGeometry(QRect(10, 10, 1121, 461));
+        tabWidget->addTab(Products, QString());
+        Orders = new QWidget();
+        Orders->setObjectName("Orders");
+        tabWidget->addTab(Orders, QString());
+
+        retranslateUi(adminPage);
+
+        tabWidget->setCurrentIndex(0);
+
+
+        QMetaObject::connectSlotsByName(adminPage);
+    } // setupUi
+
+    void retranslateUi(QWidget *adminPage)
+    {
+        adminPage->setWindowTitle(QCoreApplication::translate("adminPage", "Form", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(Products), QCoreApplication::translate("adminPage", "Products", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(Orders), QCoreApplication::translate("adminPage", "Orders", nullptr));
+    } // retranslateUi
+
+};
+
+namespace Ui {
+    class adminPage: public Ui_adminPage {};
+} // namespace Ui
+
+QT_END_NAMESPACE
+
+#endif // UI_ADMINPAGE_H
