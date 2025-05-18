@@ -28,11 +28,13 @@ public:
     QWidget *Products;
     QTableWidget *productList;
     QWidget *Orders;
+    QTableWidget *orderList;
     QWidget *Cart;
     QTableWidget *cartList;
     QLabel *label;
     QLineEdit *orderTotal;
     QPushButton *placeOrder;
+    QPushButton *logout;
 
     void setupUi(QWidget *userPage)
     {
@@ -52,6 +54,9 @@ public:
         tabWidget->addTab(Products, QString());
         Orders = new QWidget();
         Orders->setObjectName("Orders");
+        orderList = new QTableWidget(Orders);
+        orderList->setObjectName("orderList");
+        orderList->setGeometry(QRect(10, 10, 1111, 461));
         tabWidget->addTab(Orders, QString());
         Cart = new QWidget();
         Cart->setObjectName("Cart");
@@ -69,10 +74,13 @@ public:
         placeOrder->setObjectName("placeOrder");
         placeOrder->setGeometry(QRect(1020, 440, 91, 29));
         tabWidget->addTab(Cart, QString());
+        logout = new QPushButton(userPage);
+        logout->setObjectName("logout");
+        logout->setGeometry(QRect(1030, 10, 83, 29));
 
         retranslateUi(userPage);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(userPage);
@@ -87,6 +95,7 @@ public:
         orderTotal->setText(QCoreApplication::translate("userPage", "0", nullptr));
         placeOrder->setText(QCoreApplication::translate("userPage", "Place Order", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(Cart), QCoreApplication::translate("userPage", "Cart", nullptr));
+        logout->setText(QCoreApplication::translate("userPage", "Logout", nullptr));
     } // retranslateUi
 
 };

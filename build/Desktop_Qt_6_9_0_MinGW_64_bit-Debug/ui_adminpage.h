@@ -25,6 +25,7 @@ public:
     QWidget *Products;
     QTableWidget *productList;
     QWidget *Orders;
+    QTableWidget *orderList;
 
     void setupUi(QWidget *adminPage)
     {
@@ -42,11 +43,14 @@ public:
         tabWidget->addTab(Products, QString());
         Orders = new QWidget();
         Orders->setObjectName("Orders");
+        orderList = new QTableWidget(Orders);
+        orderList->setObjectName("orderList");
+        orderList->setGeometry(QRect(10, 10, 1111, 461));
         tabWidget->addTab(Orders, QString());
 
         retranslateUi(adminPage);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(adminPage);

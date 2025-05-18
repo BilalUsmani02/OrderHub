@@ -23,10 +23,11 @@ private slots:
     void on_tabWidget_tabBarClicked(int index);
 
     void on_placeOrder_clicked();
+    void on_logout_clicked();
 
 private:
     Ui::userPage *ui;
-    User user{"Bilal"};
+    User currentUser;
     Order* order=nullptr;
     void populateCartTable(const Order& ord);
     vector<Product>* prods;

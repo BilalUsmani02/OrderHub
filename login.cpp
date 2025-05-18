@@ -38,6 +38,15 @@ void login::on_loginbutton_clicked()
     QString p = ui->ipassword->text();
     ui->errormsg->setText(" ");
 
+    // 🔒 Special case: Check hardcoded admin credentials
+    if (u == "admin" && p == "admin123") {
+        adminPage *adminWindow = new adminPage();
+        connect(adminWindow, &adminPage::destroyed, this, &login::show);
+        adminWindow->show();
+        this->hide();
+        return;
+    }
+
     QFile file("users.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         ui->errormsg->setText("Could not open users.txt");
@@ -72,7 +81,7 @@ void login::on_loginbutton_clicked()
     file.close();
 
     if (loginSuccess) {
-        User currentUser(matchedId,matchedUsername.toStdString());  // using id and name
+        User currentUser(matchedId, matchedUsername.toStdString());
         userPage *userPageWindow = new userPage(currentUser);
         connect(userPageWindow, &userPage::destroyed, this, &login::show);
         userPageWindow->show();
