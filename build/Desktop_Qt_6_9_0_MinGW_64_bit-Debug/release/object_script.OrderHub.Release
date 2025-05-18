@@ -1,0 +1,10 @@
+release/adminpage.o
+release/main.o
+release/login.o
+release/payment.o
+release/store.o
+release/userpage.o
+release/moc_adminpage.o
+release/moc_login.o
+release/moc_payment.o
+release/moc_userpage.o

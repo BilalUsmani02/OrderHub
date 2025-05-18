@@ -45,13 +45,12 @@ public:
 class CardPayment : public PaymentMethod {
     string cardNumber;
     string expiry;
-    int cvv;
+    string cvv;
 
 public:
-    CardPayment();
+    CardPayment(string cn, string exp, string cvv,float amt);
 
     void pay(float amount);
-
 };
 
 class CashPayment : public PaymentMethod {
@@ -62,17 +61,17 @@ public:
 };
 
 class EasyPaisaPayment : public PaymentMethod {
-    int accountNumber;
+    string accountNumber;
 public:
-    EasyPaisaPayment();
+    EasyPaisaPayment(string acc);
 
     void pay(float amount);
 };
 
 class JazzCashPayment : public PaymentMethod {
-    int accountNumber;
+    string accountNumber;
 public:
-    JazzCashPayment();
+    JazzCashPayment(string acc);
 
     void pay(float amount);
 };

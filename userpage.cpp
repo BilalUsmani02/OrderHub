@@ -1,5 +1,6 @@
 #include "userpage.h"
 #include "ui_userpage.h"
+#include "payment.h"
 #include <QPushButton>
 #include <QMessageBox>
 #include <QHBoxLayout>
@@ -9,6 +10,8 @@
 userPage::userPage(QWidget *parent): QWidget(parent), ui(new Ui::userPage){
 
     ui->setupUi(this);
+    ui->tabWidget->setCurrentIndex(0);
+
     this->show();
 
     vector<Product>* prods = Store::getInstance()->allProducts();
@@ -90,7 +93,6 @@ userPage::userPage(QWidget *parent): QWidget(parent), ui(new Ui::userPage){
 void userPage::populateCartTable(const Order& ord)
 {
     const auto& cart = ord.getCart();
-
     ui->cartList->clear();
     ui->cartList->setRowCount(0);
     ui->cartList->setColumnCount(4);
@@ -101,11 +103,24 @@ void userPage::populateCartTable(const Order& ord)
     for (int i = 0; i < static_cast<int>(cart.size()); ++i) {
         const OrderItem& it = cart[i];
         ui->cartList->insertRow(i);
-        ui->cartList->setItem(i,0,new QTableWidgetItem(QString::fromStdString(it.getName())));
-        ui->cartList->setItem(i,1,new QTableWidgetItem(QString::number(it.getPrice(),'f',2)));
-        ui->cartList->setItem(i,2,new QTableWidgetItem(QString::number(it.getQuantity())));
-        ui->cartList->setItem(i,3,new QTableWidgetItem(QString::number(it.totalPrice(),'f',2)));
+
+        QTableWidgetItem* nameItem = new QTableWidgetItem(QString::fromStdString(it.getName()));
+        QTableWidgetItem* priceItem = new QTableWidgetItem(QString::number(it.getPrice(), 'f', 2));
+        QTableWidgetItem* qtyItem = new QTableWidgetItem(QString::number(it.getQuantity()));
+        QTableWidgetItem* subtotalItem = new QTableWidgetItem(QString::number(it.totalPrice(), 'f', 2));
+
+        // Make them all non-editable
+        nameItem->setFlags(nameItem->flags() & ~Qt::ItemIsEditable);
+        priceItem->setFlags(priceItem->flags() & ~Qt::ItemIsEditable);
+        qtyItem->setFlags(qtyItem->flags() & ~Qt::ItemIsEditable);
+        subtotalItem->setFlags(subtotalItem->flags() & ~Qt::ItemIsEditable);
+
+        ui->cartList->setItem(i, 0, nameItem);
+        ui->cartList->setItem(i, 1, priceItem);
+        ui->cartList->setItem(i, 2, qtyItem);
+        ui->cartList->setItem(i, 3, subtotalItem);
     }
+
 
     QString oTotal = QString::number(order->calculateTotalPrice(), 'f', 2); // 2-decimal formatting
     ui->orderTotal->setText(oTotal);
@@ -124,12 +139,19 @@ userPage::~userPage()
 
 void userPage::on_tabWidget_tabBarClicked(int index)
 {
+    ui->orderTotal->hide();
+    ui->label->hide();
+    ui->placeOrder->hide();
 
-    const int productTabIndex =1;
+    const int productTabIndex =0;
     const int cartTabIndex = 2;
 
     if (index == cartTabIndex &&  order) {
         populateCartTable(*order);
+        ui->orderTotal->show();
+        ui->label->show();
+        ui->placeOrder->show();
+
     }else{
         ui->orderTotal->hide();
         ui->label->hide();
@@ -138,4 +160,13 @@ void userPage::on_tabWidget_tabBarClicked(int index)
 }
 
 
+
+
+void userPage::on_placeOrder_clicked()
+{
+    Payment *paymentWindow = new Payment(*order);  // parent is login
+    connect(paymentWindow, &Payment::destroyed, this, &userPage::show);  // show login when userPage is closed
+    paymentWindow->show();
+    this->hide();
+}
 

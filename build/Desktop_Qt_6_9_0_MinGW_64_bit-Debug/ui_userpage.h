@@ -41,7 +41,7 @@ public:
         userPage->resize(1163, 598);
         tabWidget = new QTabWidget(userPage);
         tabWidget->setObjectName("tabWidget");
-        tabWidget->setGeometry(QRect(10, 60, 1141, 521));
+        tabWidget->setGeometry(QRect(10, 20, 1141, 521));
         tabWidget->setTabPosition(QTabWidget::TabPosition::North);
         tabWidget->setTabShape(QTabWidget::TabShape::Rounded);
         Products = new QWidget();

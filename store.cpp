@@ -1,5 +1,4 @@
 #include "store.h"
-
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -37,9 +36,12 @@ string PaymentMethod::getPaymentType()const{return paymentType;}
 float PaymentMethod::getAmountPaid()const{return amountPaid;}
 
 
-CardPayment::CardPayment() {
+CardPayment::CardPayment(string cn, string exp, string cvv,float amt) {
+    cardNumber=cn;
+    expiry=exp;
+    this->cvv=cvv;
+    amountPaid=amt;
     paymentType = "Card";
-    amountPaid = 0;
 }
 
 void CardPayment::pay(float amount){
@@ -65,7 +67,8 @@ void CashPayment::pay(float amount){
 
 }
 
-EasyPaisaPayment::EasyPaisaPayment() {
+EasyPaisaPayment::EasyPaisaPayment(string acc) {
+    accountNumber=acc;
     paymentType = "EasyPaisa";
     amountPaid = 0;
 }
@@ -77,7 +80,8 @@ void EasyPaisaPayment::pay(float amount){
     cout << "EasyPaisa payment of Rs." << amount << " processed successfully.\n";
 }
 
-JazzCashPayment::JazzCashPayment() {
+JazzCashPayment::JazzCashPayment(string acc) {
+    accountNumber=acc;
     paymentType = "JazzCash";
     amountPaid = 0;
 }
@@ -110,7 +114,6 @@ string Order::getPaymentMethod() const{return paymentMethod->getPaymentType();}
 void Order::setStatus(string stat){status=stat;}
 void Order::setPaymentMethod(PaymentMethod* pm){
     paymentMethod = pm;
-    paymentMethod->pay(calculateTotalPrice());
 }
 
 void Order::addItem(OrderItem item){
@@ -409,61 +412,61 @@ void Store::trackOrder(int orderId){
         cout<<"All Products:\n";
         store.displayProducts();
     }
-    void User::placeOrder(Store& store) {
-        Order order(id);
-        int pid, qty;
-        char choice;
+    // void User::placeOrder(Store& store) {
+    //     Order order(id);
+    //     int pid, qty;
+    //     char choice;
 
-        do {
-            cout << "Enter Product ID to add: ";
-            cin >> pid;
-            cout << "Quantity: ";
-            cin >> qty;
-            Product* product = store.getProductById(pid);
-            if (product) {
-                order.addItem(OrderItem(pid, product->getName(), product->getPrice(), qty));
-            } else {
-                cout << "Product not found.\n";
-            }
-            cout << "Add more items? (y/n): ";
-            cin >> choice;
-        } while (choice == 'y');
+    //     do {
+    //         cout << "Enter Product ID to add: ";
+    //         cin >> pid;
+    //         cout << "Quantity: ";
+    //         cin >> qty;
+    //         Product* product = store.getProductById(pid);
+    //         if (product) {
+    //             order.addItem(OrderItem(pid, product->getName(), product->getPrice(), qty));
+    //         } else {
+    //             cout << "Product not found.\n";
+    //         }
+    //         cout << "Add more items? (y/n): ";
+    //         cin >> choice;
+    //     } while (choice == 'y');
 
-        order.display();
-        cout << "Proceed with payment? (y/n): ";
-        cin >> choice;
+    //     order.display();
+    //     cout << "Proceed with payment? (y/n): ";
+    //     cin >> choice;
 
-        if (choice == 'y') {
-            int paymentOption;
-            PaymentMethod* payment = nullptr;
-            cout << "Choose payment method (1. Card, 2. Cash, 3. EasyPaisa, 4. JazzCash): ";
-            cin >> paymentOption;
+    //     if (choice == 'y') {
+    //         int paymentOption;
+    //         PaymentMethod* payment = nullptr;
+    //         cout << "Choose payment method (1. Card, 2. Cash, 3. EasyPaisa, 4. JazzCash): ";
+    //         cin >> paymentOption;
 
-            switch (paymentOption) {
-            case 1:
-                payment = new CardPayment();
-                break;
-            case 2:
-                payment = new CashPayment();
-                break;
-            case 3:
-                payment = new EasyPaisaPayment();
-                break;
-            case 4:
-                payment = new JazzCashPayment();
-                break;
-            default:
-                cout << "Invalid option. Defaulting to Cash.\n";
-                payment = new CashPayment();
-            }
+    //         switch (paymentOption) {
+    //         case 1:
+    //             payment = new CardPayment();
+    //             break;
+    //         case 2:
+    //             payment = new CashPayment();
+    //             break;
+    //         case 3:
+    //             payment = new EasyPaisaPayment();
+    //             break;
+    //         case 4:
+    //             payment = new JazzCashPayment();
+    //             break;
+    //         default:
+    //             cout << "Invalid option. Defaulting to Cash.\n";
+    //             payment = new CashPayment();
+    //         }
 
-            order.setPaymentMethod(payment);
-            store.addOrder(order);
-            cout << "Order placed successfully!\n";
-        } else {
-            cout << "Order cancelled.\n";
-        }
-    }
+    //         order.setPaymentMethod(payment);
+    //         store.addOrder(order);
+    //         cout << "Order placed successfully!\n";
+    //     } else {
+    //         cout << "Order cancelled.\n";
+    //     }
+    // }
 
     void User::trackOrder(Store& store) {
         int orderId;

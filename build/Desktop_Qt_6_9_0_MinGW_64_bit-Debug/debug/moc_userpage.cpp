@@ -43,7 +43,8 @@ template <> constexpr inline auto userPage::qt_create_metaobjectdata<qt_meta_tag
         "",
         "Order",
         "on_tabWidget_tabBarClicked",
-        "index"
+        "index",
+        "on_placeOrder_clicked"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -55,6 +56,8 @@ template <> constexpr inline auto userPage::qt_create_metaobjectdata<qt_meta_tag
         QtMocHelpers::SlotData<void(int)>(4, 2, QMC::AccessPrivate, QMetaType::Void, {{
             { QMetaType::Int, 5 },
         }}),
+        // Slot 'on_placeOrder_clicked'
+        QtMocHelpers::SlotData<void()>(6, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -80,6 +83,7 @@ void userPage::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         switch (_id) {
         case 0: _t->cartUpdated((*reinterpret_cast< std::add_pointer_t<Order>>(_a[1]))); break;
         case 1: _t->on_tabWidget_tabBarClicked((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 2: _t->on_placeOrder_clicked(); break;
         default: ;
         }
     }
@@ -108,14 +112,14 @@ int userPage::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 3)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 3;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 2)
+        if (_id < 3)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 2;
+        _id -= 3;
     }
     return _id;
 }

@@ -12,18 +12,21 @@ SOURCES += \
     adminpage.cpp \
     main.cpp \
     login.cpp \
+    payment.cpp \
     store.cpp \
     userpage.cpp
 
 HEADERS += \
     adminpage.h \
     login.h \
+    payment.h \
     store.h \
     userpage.h
 
 FORMS += \
     adminpage.ui \
     login.ui \
+    payment.ui \
     userpage.ui
 
 # Default rules for deployment.

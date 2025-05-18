@@ -22,10 +22,13 @@ signals:
 private slots:
     void on_tabWidget_tabBarClicked(int index);
 
+    void on_placeOrder_clicked();
+
 private:
     Ui::userPage *ui;
     User user{1,"Bilal"};
     Order* order=nullptr;
     void populateCartTable(const Order& ord);
+    vector<Product>* prods;
 };
 #endif // USERPAGE_H
