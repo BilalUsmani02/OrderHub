@@ -38,6 +38,7 @@ public:
     QPushButton *registerBtn;
     QPushButton *LP;
     QPushButton *RP;
+    QLabel *label_7;
 
     void setupUi(QMainWindow *login)
     {
@@ -93,6 +94,11 @@ public:
         RP = new QPushButton(centralwidget);
         RP->setObjectName("RP");
         RP->setGeometry(QRect(130, 270, 121, 29));
+        label_7 = new QLabel(centralwidget);
+        label_7->setObjectName("label_7");
+        label_7->setGeometry(QRect(380, 0, 281, 121));
+        label_7->setPixmap(QPixmap(QString::fromUtf8("order-hub-high-resolution-logo.png")));
+        label_7->setScaledContents(true);
         login->setCentralWidget(centralwidget);
 
         retranslateUi(login);
@@ -114,6 +120,7 @@ public:
         registerBtn->setText(QCoreApplication::translate("login", "Register", nullptr));
         LP->setText(QCoreApplication::translate("login", "Login Page", nullptr));
         RP->setText(QCoreApplication::translate("login", "Register Page", nullptr));
+        label_7->setText(QString());
     } // retranslateUi
 
 };
