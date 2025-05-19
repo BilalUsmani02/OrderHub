@@ -18,6 +18,9 @@ public:
     ~login();
 
 private slots:
+    void validateRegisterFields();
+    void toggleLoginPasswordVisibility(int state);
+    void toggleRegisterPasswordVisibility(int state);
 
     void on_loginbutton_clicked();
 

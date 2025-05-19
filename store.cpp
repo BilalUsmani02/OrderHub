@@ -6,16 +6,12 @@ using namespace std;
 
 int Product::nextId=1;
 
-Product::Product(string n, float p){
-    id=nextId++;
-    name=n;
-    price=p;
+Product::Product(string n, float p): id(nextId++), name(n), price(p) {}
+Product::Product(int i, string n, float p)
+    : id(i), name(std::move(n)), price(p) {
+    if (i >= nextId) nextId = i + 1;
 }
-Product::Product(int i,string n, float p){
-    id=i;
-    name=n;
-    price=p;
-}
+
 void Product::setName(string n){name=n;}
 
 
@@ -115,6 +111,7 @@ Order::Order(int uid){
     userId=uid;
     status="Pending";
     paymentMethod = nullptr;
+
 }
 
 Order::~Order(){
@@ -135,18 +132,16 @@ void Order::addItem(OrderItem item){
     cart.push_back(item);
 }
 
-void Order::addItemToCart(OrderItem item){
-    bool present=false;
+void Order::addItemToCart(OrderItem item) {
     for (auto& i : cart) {
         if (item.getId() == i.getId()) {
-            present=true;
-            i.setQuantity(item.getQuantity() + i.getQuantity());
+            i.setQuantity(i.getQuantity() + item.getQuantity());
+            return;  // item updated, done
         }
     }
-    if(present==false){
-        cart.push_back(item);
-    }
+    cart.push_back(item);  // not found, add new
 }
+
 
 void Order::decreaseQuantity(int productId) {
     for (auto it = cart.begin(); it != cart.end(); ++it) {

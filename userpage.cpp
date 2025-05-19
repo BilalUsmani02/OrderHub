@@ -18,81 +18,71 @@ userPage::userPage(User& user,QWidget *parent)
     ui->tabWidget->setCurrentIndex(0);
     this->show();
 
+    // inside userPage constructor after setupUi
+
     vector<Product>* prods = Store::getInstance()->allProducts();
-    qDebug() << "Number of products loaded:" << prods->size();
+    ui->productList->setColumnCount(4);
+    QStringList headers;
+    headers << "Name" << "Price" << "Quantity" << " ";
+    ui->productList->setHorizontalHeaderLabels(headers);
+    ui->productList->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-    if (prods->empty()) {
-        ui->productList->setColumnCount(1);
-        ui->productList->insertRow(0);
-        QTableWidgetItem* nameItem = new QTableWidgetItem("No Products");
-        ui->productList->setItem(0, 0, nameItem);
-    } else {
-        ui->productList->setColumnCount(4);
-        QStringList headers;
-        headers << "Name" << "Price" << "Quantity" << " ";
-        ui->productList->setHorizontalHeaderLabels(headers);
-        ui->productList->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    for (int i = 0; i < static_cast<int>(prods->size()); ++i) {
+        Product product = prods->at(i);
+        ui->productList->insertRow(i);
 
-        for (int i = 0; i < static_cast<int>(prods->size()); i++) {
-            const Product& product = prods->at(i);
-            qDebug() << "Loading product:" << QString::fromStdString(product.getName());
+        auto* nameItem = new QTableWidgetItem(QString::fromStdString(product.getName()));
+        nameItem->setFlags(nameItem->flags() & ~Qt::ItemIsEditable);
+        ui->productList->setItem(i, 0, nameItem);
 
-            ui->productList->insertRow(i);
+        auto* priceItem = new QTableWidgetItem(QString::number(product.getPrice(), 'f', 2));
+        priceItem->setFlags(priceItem->flags() & ~Qt::ItemIsEditable);
+        ui->productList->setItem(i, 1, priceItem);
 
-            QTableWidgetItem* nameItem = new QTableWidgetItem(QString::fromStdString(product.getName()));
-            nameItem->setFlags(nameItem->flags() & ~Qt::ItemIsEditable);
-            ui->productList->setItem(i, 0, nameItem);
+        // Create quantity widget
+        auto* quantityWidget = new QWidget();
+        auto* layout = new QHBoxLayout(quantityWidget);
+        layout->setContentsMargins(0, 0, 0, 0);
+        layout->setAlignment(Qt::AlignCenter);
 
-            QTableWidgetItem* priceItem = new QTableWidgetItem(QString::number(product.getPrice(), 'f', 2));
-            priceItem->setFlags(priceItem->flags() & ~Qt::ItemIsEditable);
-            ui->productList->setItem(i, 1, priceItem);
+        auto* minusBtn = new QPushButton("-");
+        auto* qtyLabel = new QLabel("1");
+        auto* plusBtn = new QPushButton("+");
 
-            QWidget* quantityWidget = new QWidget();
-            QHBoxLayout* layout = new QHBoxLayout(quantityWidget);
-            layout->setContentsMargins(0, 0, 0, 0);
-            layout->setAlignment(Qt::AlignCenter);
+        minusBtn->setFixedSize(30, 25);
+        plusBtn->setFixedSize(30, 25);
+        qtyLabel->setFixedWidth(25);
+        qtyLabel->setAlignment(Qt::AlignCenter);
 
-            QPushButton* minusBtn = new QPushButton("-");
-            QLabel* qtyLabel = new QLabel("1");
-            QPushButton* plusBtn = new QPushButton("+");
+        layout->addWidget(minusBtn);
+        layout->addWidget(qtyLabel);
+        layout->addWidget(plusBtn);
+        ui->productList->setCellWidget(i, 2, quantityWidget);
 
-            minusBtn->setFixedSize(30, 25);
-            plusBtn->setFixedSize(30, 25);
-            qtyLabel->setFixedWidth(25);
-            qtyLabel->setAlignment(Qt::AlignCenter);
+        // Create Add button
+        auto* addButton = new QPushButton("Add");
+        ui->productList->setCellWidget(i, 3, addButton);
 
-            layout->addWidget(minusBtn);
-            layout->addWidget(qtyLabel);
-            layout->addWidget(plusBtn);
-            ui->productList->setCellWidget(i, 2, quantityWidget);
+        // Connect buttons using value captures (by copy)
+        connect(plusBtn, &QPushButton::clicked, this, [qtyLabel]() {
+            int qty = qtyLabel->text().toInt();
+            qtyLabel->setText(QString::number(qty + 1));
+        });
 
-            QPushButton* addButton = new QPushButton("Add");
-            ui->productList->setCellWidget(i, 3, addButton);
+        connect(minusBtn, &QPushButton::clicked, this, [qtyLabel]() {
+            int qty = qtyLabel->text().toInt();
+            if (qty > 1)
+                qtyLabel->setText(QString::number(qty - 1));
+        });
 
-            connect(plusBtn, &QPushButton::clicked, this, [=]() {
-                int qty = qtyLabel->text().toInt();
-                qtyLabel->setText(QString::number(qty + 1));
-                qDebug() << "Increased quantity to" << qty + 1 << "for product" << QString::fromStdString(product.getName());
-            });
-
-            connect(minusBtn, &QPushButton::clicked, this, [=]() {
-                int qty = qtyLabel->text().toInt();
-                if (qty > 1) {
-                    qtyLabel->setText(QString::number(qty - 1));
-                    qDebug() << "Decreased quantity to" << qty - 1 << "for product" << QString::fromStdString(product.getName());
-                }
-            });
-
-            connect(addButton, &QPushButton::clicked, this, [=]() {
-                int quantity = qtyLabel->text().toInt();
-                qDebug() << "Adding to cart:" << QString::fromStdString(product.getName()) << "Qty:" << quantity;
-
-                OrderItem item(product.getId(),product.getName(), product.getPrice(), quantity);
-                order.addItemToCart(item);
-                qtyLabel->setText("1");
-            });
-        }
+        connect(addButton, &QPushButton::clicked, this, [this, product, qtyLabel]() {
+            int quantity = qtyLabel->text().toInt();
+            OrderItem item(product.getId(), product.getName(), product.getPrice(), quantity);
+            order.addItemToCart(item);
+            qtyLabel->setText("1");
+        });
     }
+
 }
 
 void userPage::populateCartTable(const Order& ord)
@@ -199,13 +189,14 @@ void userPage::on_tabWidget_tabBarClicked(int index)
         qDebug() << "Switching to Order History tab";
         vector<Order>* orders = Store::getInstance()->allOrders();
         ui->orderList->setRowCount(0);
-        ui->orderList->setColumnCount(2);
-        ui->orderList->setHorizontalHeaderLabels(QStringList() << "Order ID" << "Status");
+        ui->orderList->setColumnCount(3); // Now 3 columns
+        ui->orderList->setHorizontalHeaderLabels(QStringList() << "Order ID" << "Status" << "Total Price");
+
 
         if (orders->empty()) {
             ui->orderList->setRowCount(1);
             ui->orderList->setItem(0, 0, new QTableWidgetItem("No orders"));
-            ui->orderList->setSpan(0, 0, 1, 3);
+            ui->orderList->setSpan(0, 0, 1, 3); // Spanning 3 columns
         }
 
         bool ord = false;
@@ -216,6 +207,13 @@ void userPage::on_tabWidget_tabBarClicked(int index)
                 ui->orderList->insertRow(row);
                 ui->orderList->setItem(row, 0, new QTableWidgetItem(QString::number(order.getId())));
                 ui->orderList->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(order.getStatus())));
+
+
+                // Get total price and insert it
+                float totalPrice = order.calculateTotalPrice();
+                QString priceStr = QString("Rs. %1").arg(totalPrice, 0, 'f', 2);
+                ui->orderList->setItem(row, 2, new QTableWidgetItem(priceStr));
+
                 ++row;
             }
         }
@@ -223,12 +221,13 @@ void userPage::on_tabWidget_tabBarClicked(int index)
         if (!ord) {
             ui->orderList->setRowCount(1);
             ui->orderList->setItem(0, 0, new QTableWidgetItem("No orders"));
-            ui->orderList->setSpan(0, 0, 1, 3);
+            ui->orderList->setSpan(0, 0, 1, 3); // Spanning all 3 columns
         }
 
         ui->orderList->resizeColumnsToContents();
         ui->orderList->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     }
+
 }
 
 void userPage::on_placeOrder_clicked()
