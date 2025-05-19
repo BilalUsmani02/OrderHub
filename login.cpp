@@ -300,5 +300,6 @@ void login::on_RP_clicked() {
     ui->label_6->show();
     ui->label_5->show();
     ui->registerShowPassword->show(); // 👈 Show checkbox
+    ui->errormsg2->show();
 }
 

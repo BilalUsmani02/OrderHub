@@ -96,44 +96,77 @@ void Payment::on_paymentType_currentIndexChanged(int index)
 
 void Payment::on_placeOrder_clicked()
 {
-
     int idx = ui->paymentType->currentIndex();
     PaymentMethod* payment = nullptr;
     QString err;
-    bool ok=true;
-    if(idx==0){
-        payment=new CashPayment();
-    }else if(idx==1){
-        QString cardNo=ui->cardnum->text();
-        QString exp=ui->exp->text();
-        QString cvv=ui->cvv->text();
-        if (cardNo.isEmpty() || exp.isEmpty() || cvv.isEmpty()) {
-            ok  = false;
-            err = "Please fill in card number, expiry and CVV.";
-        } else {
-            payment=new CardPayment(cardNo.toStdString(), exp.toStdString(), cvv.toStdString(),ord.calculateTotalPrice());
-        }
-    }else if (idx==2){
+    bool ok = true;
 
-        QString acc=ui->accnum->text();
-        payment=new EasyPaisaPayment(acc.toStdString());
-    }else if (idx==3){
-        QString acc=ui->accnum->text();
-        payment=new JazzCashPayment(acc.toStdString());
+    if (idx == 0) {
+        // Cash payment (no validation needed)
+        payment = new CashPayment();
+
+    } else if (idx == 1) {
+        // Card payment validation
+        QString cardNo = ui->cardnum->text();
+        QString exp = ui->exp->text();
+        QString cvv = ui->cvv->text();
+
+        QRegularExpression cardRegex("^\\d{16}$");     // 16 digits
+        QRegularExpression cvvRegex("^\\d{3}$");        // 3 digits
+        QRegularExpression expRegex("^(0[1-9]|1[0-2])/\\d{2}$"); // MM/YY format
+
+        if (!cardRegex.match(cardNo).hasMatch()) {
+            err += "Card number must be exactly 16 digits.\n";
+            ok = false;
+        }
+        if (!cvvRegex.match(cvv).hasMatch()) {
+            err += "CVV must be exactly 3 digits.\n";
+            ok = false;
+        }
+        if (!expRegex.match(exp).hasMatch()) {
+            err += "Expiry date must be in MM/YY format.\n";
+            ok = false;
+        }
+
+        if (ok) {
+            payment = new CardPayment(cardNo.toStdString(), exp.toStdString(), cvv.toStdString(), ord.calculateTotalPrice());
+        }
+
+    } else if (idx == 2 || idx == 3) {
+        // EasyPaisa or JazzCash
+
+        QString acc = ui->laccnum->text().trimmed();
+        QRegularExpression accRegex("^03\\d{9}$");
+
+        qDebug() << "Trimmed input:" << acc;
+        qDebug() << "Length of input:" << acc.length();
+        if (!accRegex.match(acc).hasMatch()) {
+            err = "Account number must be 11 digits and start with 03.";
+            ok = false;
+        } else {
+            if (idx == 2)
+                payment = new EasyPaisaPayment(acc.toStdString());
+            else
+                payment = new JazzCashPayment(acc.toStdString());
+        }
+
     }
+
 
     if (!ok) {
         QMessageBox::warning(this, "Invalid data", err);
         return;
     }
+
     ord.setPaymentMethod(payment);
     store->addOrder(ord);
-    QString msg="Payment recorded, order placed.\n Order Id: "+QString::number(ord.getId());
+    QString msg = "Payment recorded, order placed.\n Order Id: " + QString::number(ord.getId());
     QMessageBox::information(this, "Success", msg);
 
     emit deleteOrder();
     emit paymentCompleted();
 }
+
 
 void Payment::onPaymentCompleted() {
     delete this;
