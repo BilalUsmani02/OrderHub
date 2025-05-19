@@ -90,7 +90,7 @@ void adminPage::populateOrdList(){
     if (orders->empty()) {
         ui->orderList->setColumnCount(1);
         ui->orderList->insertRow(0);
-        QTableWidgetItem* nameItem = new QTableWidgetItem("No Products");
+        QTableWidgetItem* nameItem = new QTableWidgetItem("No Orders");
         ui->orderList->setItem(0, 0, nameItem);
     }else{
         // Clear existing rows

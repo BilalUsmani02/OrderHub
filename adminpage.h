@@ -20,6 +20,8 @@ public:
     void populateProdList();
     void populateOrdList();
     ~adminPage();
+    void on_tabWidget_tabBarClicked(int index);
+
 
 private slots:
 

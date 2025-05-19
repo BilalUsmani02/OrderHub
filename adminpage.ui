@@ -17,8 +17,8 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>50</y>
-     <width>981</width>
+     <y>60</y>
+     <width>1131</width>
      <height>521</height>
     </rect>
    </property>
@@ -37,6 +37,51 @@
        <width>961</width>
        <height>461</height>
       </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="pPrice">
+     <property name="geometry">
+      <rect>
+       <x>1000</x>
+       <y>260</y>
+       <width>113</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="placeholderText">
+      <string>Price</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton">
+     <property name="geometry">
+      <rect>
+       <x>1012</x>
+       <y>320</y>
+       <width>91</width>
+       <height>29</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Add Product</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="pName">
+     <property name="geometry">
+      <rect>
+       <x>1000</x>
+       <y>220</y>
+       <width>113</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="placeholderText">
+      <string>Name</string>
      </property>
     </widget>
    </widget>
@@ -67,51 +112,6 @@
    </property>
    <property name="text">
     <string>Logout</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton">
-   <property name="geometry">
-    <rect>
-     <x>1042</x>
-     <y>430</y>
-     <width>91</width>
-     <height>29</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Add Product</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="pName">
-   <property name="geometry">
-    <rect>
-     <x>1030</x>
-     <y>330</y>
-     <width>113</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="placeholderText">
-    <string>Name</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="pPrice">
-   <property name="geometry">
-    <rect>
-     <x>1030</x>
-     <y>370</y>
-     <width>113</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="placeholderText">
-    <string>Price</string>
    </property>
   </widget>
  </widget>

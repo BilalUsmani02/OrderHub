@@ -58,6 +58,7 @@ public:
         ipassword = new QLineEdit(centralwidget);
         ipassword->setObjectName("ipassword");
         ipassword->setGeometry(QRect(718, 271, 113, 28));
+        ipassword->setEchoMode(QLineEdit::EchoMode::Password);
         loginbutton = new QPushButton(centralwidget);
         loginbutton->setObjectName("loginbutton");
         loginbutton->setGeometry(QRect(730, 350, 83, 29));
@@ -70,6 +71,7 @@ public:
         rpassword = new QLineEdit(centralwidget);
         rpassword->setObjectName("rpassword");
         rpassword->setGeometry(QRect(720, 270, 113, 28));
+        rpassword->setEchoMode(QLineEdit::EchoMode::Password);
         label_3 = new QLabel(centralwidget);
         label_3->setObjectName("label_3");
         label_3->setGeometry(QRect(580, 210, 71, 20));
