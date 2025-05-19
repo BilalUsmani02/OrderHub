@@ -189,13 +189,14 @@ void userPage::on_tabWidget_tabBarClicked(int index)
         qDebug() << "Switching to Order History tab";
         vector<Order>* orders = Store::getInstance()->allOrders();
         ui->orderList->setRowCount(0);
-        ui->orderList->setColumnCount(2);
-        ui->orderList->setHorizontalHeaderLabels(QStringList() << "Order ID" << "Status");
+        ui->orderList->setColumnCount(3); // Now 3 columns
+        ui->orderList->setHorizontalHeaderLabels(QStringList() << "Order ID" << "Status" << "Total Price");
+
 
         if (orders->empty()) {
             ui->orderList->setRowCount(1);
             ui->orderList->setItem(0, 0, new QTableWidgetItem("No orders"));
-            ui->orderList->setSpan(0, 0, 1, 3);
+            ui->orderList->setSpan(0, 0, 1, 3); // Spanning 3 columns
         }
 
         bool ord = false;
@@ -206,6 +207,13 @@ void userPage::on_tabWidget_tabBarClicked(int index)
                 ui->orderList->insertRow(row);
                 ui->orderList->setItem(row, 0, new QTableWidgetItem(QString::number(order.getId())));
                 ui->orderList->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(order.getStatus())));
+
+
+                // Get total price and insert it
+                float totalPrice = order.calculateTotalPrice();
+                QString priceStr = QString("Rs. %1").arg(totalPrice, 0, 'f', 2);
+                ui->orderList->setItem(row, 2, new QTableWidgetItem(priceStr));
+
                 ++row;
             }
         }
@@ -213,12 +221,13 @@ void userPage::on_tabWidget_tabBarClicked(int index)
         if (!ord) {
             ui->orderList->setRowCount(1);
             ui->orderList->setItem(0, 0, new QTableWidgetItem("No orders"));
-            ui->orderList->setSpan(0, 0, 1, 3);
+            ui->orderList->setSpan(0, 0, 1, 3); // Spanning all 3 columns
         }
 
         ui->orderList->resizeColumnsToContents();
         ui->orderList->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     }
+
 }
 
 void userPage::on_placeOrder_clicked()
