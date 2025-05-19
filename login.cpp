@@ -27,6 +27,9 @@ login::login(QWidget *parent)
     ui->setupUi(this);
     qDebug() << "Login UI setup complete";
     hideAll();
+    connect(ui->rusername, &QLineEdit::textChanged, this, &login::validateRegisterFields);
+    connect(ui->rpassword, &QLineEdit::textChanged, this, &login::validateRegisterFields);
+
     connect(ui->loginShowPassword, &QCheckBox::stateChanged, this, &login::toggleLoginPasswordVisibility);
     connect(ui->registerShowPassword, &QCheckBox::stateChanged, this, &login::toggleRegisterPasswordVisibility);
 
@@ -106,8 +109,27 @@ void login::on_registerBtn_clicked()
     QString newUsername = ui->rusername->text();
     QString newPassword = ui->rpassword->text();
 
-    if (newUsername.isEmpty() || newPassword.isEmpty()) {
-        QMessageBox::warning(this, "Input Error", "Username and password cannot be empty.");
+    // Username validation
+    if (newUsername.length() < 4) {
+        QMessageBox::warning(this, "Validation Error", "Username must be at least 4 characters long.");
+        return;
+    }
+
+    // Password validation
+    if (newPassword.length() < 8 || newPassword.length() > 12) {
+        QMessageBox::warning(this, "Validation Error", "Password must be 8–12 characters long.");
+        return;
+    }
+
+    bool hasAlpha = false, hasDigit = false, hasSpecial = false;
+    for (QChar ch : newPassword) {
+        if (ch.isLetter()) hasAlpha = true;
+        else if (ch.isDigit()) hasDigit = true;
+        else hasSpecial = true;
+    }
+
+    if (!hasAlpha || !hasDigit || !hasSpecial) {
+        QMessageBox::warning(this, "Validation Error", "Password must contain at least one letter, one number, and one special character.");
         return;
     }
 
@@ -164,9 +186,11 @@ void login::on_registerBtn_clicked()
     file.close();
 
     QMessageBox::information(this, "Registration", "Account created successfully.");
+    ui->errormsg2->hide(); // can cause an error because void login::hideAll() also contains this line. I havent encountered an error rn
     ui->rusername->clear();
     ui->rpassword->clear();
 }
+
 
 void login::toggleLoginPasswordVisibility(int state) {
     if (state == Qt::Checked) {
@@ -182,6 +206,49 @@ void login::toggleRegisterPasswordVisibility(int state) {
     } else {
         ui->rpassword->setEchoMode(QLineEdit::Password);
     }
+}
+
+
+void login::validateRegisterFields() {
+    QString username = ui->rusername->text();
+    QString password = ui->rpassword->text();
+    bool valid = true;
+    QString errorMsg;
+
+    // Username check
+    if (username.length() < 4) {
+        valid = false;
+        errorMsg += "Username must be at least 4 characters.\n";
+    }
+
+    // Password checks
+    QRegularExpression reLetter("[A-Za-z]");
+    QRegularExpression reDigit("\\d");
+    QRegularExpression reSpecial("[^A-Za-z\\d]");
+
+    if (password.length() < 8 || password.length() > 12) {
+        valid = false;
+        errorMsg += "Password must be 8–12 characters.\n";
+    }
+    if (!password.contains(reLetter)) {
+        valid = false;
+        errorMsg += "Password must contain at least one letter.\n";
+    }
+    if (!password.contains(reDigit)) {
+        valid = false;
+        errorMsg += "Password must contain at least one number.\n";
+    }
+    if (!password.contains(reSpecial)) {
+        valid = false;
+        errorMsg += "Password must contain at least one special character.\n";
+    }
+
+    // Show error message in QLabel (e.g. ui->registerError)
+    ui->errormsg2->setStyleSheet("QLabel { color: red; }");
+    ui->errormsg2->setText(errorMsg);
+
+    // Enable/disable register button
+    ui->registerBtn->setEnabled(valid);
 }
 
 
@@ -217,6 +284,7 @@ void login::on_LP_clicked() {
     ui->label_2->show();
     ui->label_4->show();
     ui->loginShowPassword->show(); // 👈 Show checkbox
+    ui->errormsg2->hide();
 }
 
 
