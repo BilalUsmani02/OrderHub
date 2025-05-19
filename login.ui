@@ -27,11 +27,9 @@
      <string>LOGIN</string>
     </property>
     <property name="alignment">
-     <set>Qt::AlignCenter</set>
+     <set>Qt::AlignmentFlag::AlignCenter</set>
     </property>
    </widget>
-
-   <!-- LOGIN SECTION -->
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
@@ -55,7 +53,6 @@
      </rect>
     </property>
    </widget>
-
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
@@ -79,10 +76,9 @@
      </rect>
     </property>
     <property name="echoMode">
-     <enum>QLineEdit::Password</enum>
+     <enum>QLineEdit::EchoMode::Password</enum>
     </property>
    </widget>
-
    <widget class="QPushButton" name="loginbutton">
     <property name="geometry">
      <rect>
@@ -96,8 +92,6 @@
      <string>Login</string>
     </property>
    </widget>
-
-   <!-- ERROR MSG -->
    <widget class="QLabel" name="errormsg">
     <property name="geometry">
      <rect>
@@ -108,14 +102,12 @@
      </rect>
     </property>
     <property name="text">
-     <string></string>
+     <string/>
     </property>
     <property name="alignment">
-     <set>Qt::AlignCenter</set>
+     <set>Qt::AlignmentFlag::AlignCenter</set>
     </property>
    </widget>
-
-   <!-- REGISTER SECTION -->
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
@@ -129,10 +121,9 @@
      <string>REGISTER</string>
     </property>
     <property name="alignment">
-     <set>Qt::AlignCenter</set>
+     <set>Qt::AlignmentFlag::AlignCenter</set>
     </property>
    </widget>
-
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
@@ -156,7 +147,6 @@
      </rect>
     </property>
    </widget>
-
    <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
@@ -180,7 +170,7 @@
      </rect>
     </property>
     <property name="echoMode">
-     <enum>QLineEdit::Password</enum>
+     <enum>QLineEdit::EchoMode::Password</enum>
     </property>
    </widget>
    <widget class="QPushButton" name="registerBtn">
@@ -196,8 +186,6 @@
      <string>Register</string>
     </property>
    </widget>
-
-   <!-- NAVIGATION BUTTONS -->
    <widget class="QPushButton" name="LP">
     <property name="geometry">
      <rect>
@@ -224,7 +212,32 @@
      <string>Register Page</string>
     </property>
    </widget>
-
+   <widget class="QCheckBox" name="loginShowPassword">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>170</y>
+      <width>93</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Hide</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="registerShowPassword">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>380</y>
+      <width>93</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Hide</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

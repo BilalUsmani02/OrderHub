@@ -19,6 +19,9 @@ public:
 
 private slots:
 
+    void toggleLoginPasswordVisibility(int state);
+    void toggleRegisterPasswordVisibility(int state);
+
     void on_loginbutton_clicked();
 
     void on_registerBtn_clicked();

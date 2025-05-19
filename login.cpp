@@ -7,7 +7,7 @@
 #include <QMessageBox>
 #include <QFile>
 #include <QTextStream>
-
+#include <QCheckBox>
 using namespace std;
 
 void xorEncryptDecrypt(QString& str) {
@@ -27,6 +27,9 @@ login::login(QWidget *parent)
     ui->setupUi(this);
     qDebug() << "Login UI setup complete";
     hideAll();
+    connect(ui->loginShowPassword, &QCheckBox::stateChanged, this, &login::toggleLoginPasswordVisibility);
+    connect(ui->registerShowPassword, &QCheckBox::stateChanged, this, &login::toggleRegisterPasswordVisibility);
+
 }
 
 login::~login()
@@ -108,23 +111,35 @@ void login::on_registerBtn_clicked()
         return;
     }
 
-    // Determine the next available user ID
+    // Check for existing username and determine the last user ID
     int lastId = 0;
+    bool usernameExists = false;
+
     QFile readFile("users.txt");
     if (readFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream in(&readFile);
         while (!in.atEnd()) {
             QString line = in.readLine();
             QStringList parts = line.split(" ");
-            if (parts.size() >= 1) {
+            if (parts.size() >= 2) {
                 bool ok;
                 int id = parts[0].toInt(&ok);
+                QString existingUsername = parts[1];
                 if (ok && id > lastId) {
                     lastId = id;
+                }
+                if (existingUsername == newUsername) {
+                    usernameExists = true;
+                    break;
                 }
             }
         }
         readFile.close();
+    }
+
+    if (usernameExists) {
+        QMessageBox::warning(this, "Registration Error", "Username already exists. Please choose a different username.");
+        return;
     }
 
     // Set the static nextUid to lastId + 1
@@ -153,6 +168,22 @@ void login::on_registerBtn_clicked()
     ui->rpassword->clear();
 }
 
+void login::toggleLoginPasswordVisibility(int state) {
+    if (state == Qt::Checked) {
+        ui->ipassword->setEchoMode(QLineEdit::Normal);
+    } else {
+        ui->ipassword->setEchoMode(QLineEdit::Password);
+    }
+}
+
+void login::toggleRegisterPasswordVisibility(int state) {
+    if (state == Qt::Checked) {
+        ui->rpassword->setEchoMode(QLineEdit::Normal);
+    } else {
+        ui->rpassword->setEchoMode(QLineEdit::Password);
+    }
+}
+
 
 void login::hideAll() {
     // Hide all login and register widgets
@@ -169,6 +200,9 @@ void login::hideAll() {
     ui->label_3->hide();
     ui->label_6->hide();
     ui->label_5->hide();
+    ui->loginShowPassword->hide();
+    ui->registerShowPassword->hide();
+
 }
 
 
@@ -182,7 +216,9 @@ void login::on_LP_clicked() {
     ui->label->show();
     ui->label_2->show();
     ui->label_4->show();
+    ui->loginShowPassword->show(); // 👈 Show checkbox
 }
+
 
 
 void login::on_RP_clicked() {
@@ -195,4 +231,6 @@ void login::on_RP_clicked() {
     ui->label_3->show();
     ui->label_6->show();
     ui->label_5->show();
+    ui->registerShowPassword->show(); // 👈 Show checkbox
 }
+
