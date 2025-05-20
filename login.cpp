@@ -46,7 +46,7 @@ void login::on_loginbutton_clicked()
     QString u = ui->iusername->text();
     QString p = ui->ipassword->text();
     ui->errormsg->setText(" ");
-
+    ui->errormsg->show();
     
     if (u == "admin" && p == "admin123") {
         adminPage *adminWindow = new adminPage();
@@ -308,5 +308,6 @@ void login::on_RP_clicked() {
     ui->label_5->show();
     ui->registerShowPassword->show(); 
     ui->errormsg2->show();
+    ui->errormsg->hide();
 }
 
