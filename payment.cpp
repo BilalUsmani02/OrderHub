@@ -90,7 +90,7 @@ void Payment::on_paymentType_currentIndexChanged(int index)
         ui->exp->setVisible(true);
         ui->cvv->setVisible(true);
         qDebug() << "[Payment] Showing card input fields";
-    } else if (index == 2 || index == 3) { // EasyPaisa / JazzCash
+    } else if (index == 2 || index == 3) {
         ui->accnum->setVisible(true);
         ui->laccnum->setVisible(true);
         qDebug() << "[Payment] Showing account number field";

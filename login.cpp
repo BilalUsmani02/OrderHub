@@ -94,6 +94,10 @@ void login::on_loginbutton_clicked()
         userPage *userPageWindow = new userPage(currentUser);
         QObject::connect(userPageWindow, &userPage::logoutSignal, [&]() {
             this->show();  // Bring login back
+            ui->iusername->clear();
+            ui->ipassword->clear();
+            ui->rusername->clear();
+            ui->rpassword->clear();
         });
         connect(userPageWindow, &userPage::destroyed, this, &login::show);
         userPageWindow->show();

@@ -5,6 +5,7 @@ release/orderinfo.o
 release/payment.o
 release/store.o
 release/userpage.o
+release/qrc_logo.o
 release/moc_adminpage.o
 release/moc_login.o
 release/moc_orderinfo.o

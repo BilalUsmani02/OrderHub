@@ -189,8 +189,8 @@
    <widget class="QPushButton" name="LP">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>20</y>
+      <x>40</x>
+      <y>210</y>
       <width>100</width>
       <height>30</height>
      </rect>
@@ -202,8 +202,8 @@
    <widget class="QPushButton" name="RP">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>60</y>
+      <x>40</x>
+      <y>250</y>
       <width>100</width>
       <height>30</height>
      </rect>
@@ -215,17 +215,17 @@
    <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
-      <x>360</x>
-      <y>20</y>
+      <x>300</x>
+      <y>-20</y>
       <width>281</width>
-      <height>121</height>
+      <height>221</height>
      </rect>
     </property>
     <property name="text">
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>order-hub-high-resolution-logo.png</pixmap>
+     <pixmap resource="logo.qrc">:/images/OrderHubLogo.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -272,6 +272,8 @@
    </widget>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="logo.qrc"/>
+ </resources>
  <connections/>
 </ui>

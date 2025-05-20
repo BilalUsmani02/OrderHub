@@ -48,7 +48,7 @@ public:
     {
         if (login->objectName().isEmpty())
             login->setObjectName("login");
-        login->resize(1127, 538);
+        login->resize(879, 538);
         centralwidget = new QWidget(login);
         centralwidget->setObjectName("centralwidget");
         label_4 = new QLabel(centralwidget);
@@ -97,14 +97,14 @@ public:
         registerBtn->setGeometry(QRect(400, 370, 100, 30));
         LP = new QPushButton(centralwidget);
         LP->setObjectName("LP");
-        LP->setGeometry(QRect(30, 20, 100, 30));
+        LP->setGeometry(QRect(40, 210, 100, 30));
         RP = new QPushButton(centralwidget);
         RP->setObjectName("RP");
-        RP->setGeometry(QRect(30, 60, 100, 30));
+        RP->setGeometry(QRect(40, 250, 100, 30));
         label_7 = new QLabel(centralwidget);
         label_7->setObjectName("label_7");
-        label_7->setGeometry(QRect(840, 30, 281, 121));
-        label_7->setPixmap(QPixmap(QString::fromUtf8("order-hub-high-resolution-logo.png")));
+        label_7->setGeometry(QRect(300, -20, 281, 221));
+        label_7->setPixmap(QPixmap(QString::fromUtf8(":/images/OrderHubLogo.png")));
         label_7->setScaledContents(true);
         loginShowPassword = new QCheckBox(centralwidget);
         loginShowPassword->setObjectName("loginShowPassword");
