@@ -47,12 +47,17 @@ void login::on_loginbutton_clicked()
     QString p = ui->ipassword->text();
     ui->errormsg->setText(" ");
     ui->errormsg->show();
+
     
     if (u == "admin" && p == "admin123") {
         adminPage *adminWindow = new adminPage();
         connect(adminWindow, &adminPage::destroyed, this, &login::show);
         adminWindow->show();
         this->hide();
+        ui->iusername->clear();
+        ui->ipassword->clear();
+        ui->rusername->clear();
+        ui->rpassword->clear();
         return;
     }
 
@@ -283,7 +288,10 @@ void login::hideAll() {
 void login::on_LP_clicked() {
     hideAll();
 
-    
+    ui->iusername->clear();
+    ui->ipassword->clear();
+    ui->rusername->clear();
+    ui->rpassword->clear();
     ui->iusername->show();
     ui->ipassword->show();
     ui->loginbutton->show();
