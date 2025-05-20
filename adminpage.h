@@ -5,6 +5,7 @@
 #include<QTableWidgetItem>
 #include "store.h"
 #include <vector>
+#include "orderinfo.h"
 
 namespace Ui {
 class adminPage;

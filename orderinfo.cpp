@@ -24,6 +24,11 @@ OrderInfo::OrderInfo(const Order &order, QWidget *parent)
     ui->address->setReadOnly(true);
     qDebug("address");
 
+    // Set payment method
+    ui->payMethod->setText(QString::fromStdString(order.getPayMethod()));
+    ui->payMethod->setReadOnly(true);
+    qDebug("payMethod");
+
     qDebug("Cart");
     // Configure cart table
     const auto& cart = order.getCart();

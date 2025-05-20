@@ -82,67 +82,66 @@ void adminPage::populateProdList(){
         }
     }
 }
-
-void adminPage::populateOrdList(){
-
+void adminPage::populateOrdList() {
     vector<Order>* orders = Store::getInstance()->allOrders();
+
     if (orders->empty()) {
         ui->orderList->setColumnCount(1);
         ui->orderList->insertRow(0);
         QTableWidgetItem* nameItem = new QTableWidgetItem("No Orders");
         ui->orderList->setItem(0, 0, nameItem);
-    }else{
-        // Clear existing rows
-        ui->orderList->setRowCount(0);
-
-        // Set column headers (optional if already done in Designer)
-        ui->orderList->setColumnCount(3);
-        ui->orderList->setHorizontalHeaderLabels(QStringList() << "Order ID" << "User ID" << "Status");
-
-        // Check if orders list is empty
-        if (orders->empty()) {
-            ui->orderList->setRowCount(1);
-            ui->orderList->setItem(0, 0, new QTableWidgetItem("No orders"));
-            ui->orderList->setSpan(0, 0, 1, 3); // Span across all 3 columns
-        }
-
-        int row = 0;
-        for (const auto& order : *orders) {
-            ui->orderList->insertRow(row);
-            QTableWidgetItem* idItem = new QTableWidgetItem(QString::number(order.getId()));
-            idItem->setFlags(idItem->flags() & ~Qt::ItemIsEditable);
-            ui->orderList->setItem(row, 0, idItem);
-
-            QTableWidgetItem* userItem = new QTableWidgetItem(QString::number(order.getUserId()));
-            userItem->setFlags(userItem->flags() & ~Qt::ItemIsEditable);
-            ui->orderList->setItem(row, 1, userItem);
-
-            QComboBox* statusCombo = new QComboBox();
-            statusCombo->addItems({"Pending", "Accepted", "In Transit", "Shipped"});
-
-            // Set current value
-            int index = statusCombo->findText(QString::fromStdString(order.getStatus()));
-            statusCombo->setCurrentIndex(index == -1 ? 0 : index);  // default to "Pending" if not found
-
-            // Set the combo box in the cell
-            ui->orderList->setCellWidget(row, 2, statusCombo);
-
-            // Capture the row index in the lambda
-            connect(statusCombo, &QComboBox::currentTextChanged, this, [=](const QString &newStatus) {
-                vector<Order>* orders = Store::getInstance()->allOrders();
-                if (row >= 0 && row < static_cast<int>(orders->size())) {
-                    (*orders)[row].setStatus(newStatus.toStdString());
-                }
-            });
-
-            ++row;
-        }
-
-        ui->orderList->resizeColumnsToContents();  // Optional: Auto-resize columns
-        ui->orderList->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-
+        return;
     }
+
+    ui->orderList->setRowCount(0);
+    ui->orderList->setColumnCount(4);
+    ui->orderList->setHorizontalHeaderLabels(QStringList() << "Order ID" << "User ID" << "Status" << "View");
+
+    for (int row = 0; row < static_cast<int>(orders->size()); ++row) {
+        Order& order = (*orders)[row];
+        ui->orderList->insertRow(row);
+
+        QTableWidgetItem* idItem = new QTableWidgetItem(QString::number(order.getId()));
+        idItem->setFlags(idItem->flags() & ~Qt::ItemIsEditable);
+        ui->orderList->setItem(row, 0, idItem);
+
+        QTableWidgetItem* userItem = new QTableWidgetItem(QString::number(order.getUserId()));
+        userItem->setFlags(userItem->flags() & ~Qt::ItemIsEditable);
+        ui->orderList->setItem(row, 1, userItem);
+
+        QComboBox* statusCombo = new QComboBox();
+        statusCombo->addItems({"Pending", "Accepted", "In Transit", "Shipped"});
+        int index = statusCombo->findText(QString::fromStdString(order.getStatus()));
+        statusCombo->setCurrentIndex(index == -1 ? 0 : index);
+        ui->orderList->setCellWidget(row, 2, statusCombo);
+
+        connect(statusCombo, &QComboBox::currentTextChanged, this, [row](const QString &newStatus) {
+            vector<Order>* orders = Store::getInstance()->allOrders();
+            if (row >= 0 && row < static_cast<int>(orders->size())) {
+                (*orders)[row].setStatus(newStatus.toStdString());
+            }
+        });
+
+        // "View" button
+        QPushButton* viewButton = new QPushButton("View");
+        ui->orderList->setCellWidget(row, 3, viewButton);
+
+        // Create new Order copy on demand when button is clicked
+        connect(viewButton, &QPushButton::clicked, this, [row]() {
+            vector<Order>* orders = Store::getInstance()->allOrders();
+            if (row >= 0 && row < static_cast<int>(orders->size())) {
+                Order* orderCopy = new Order((*orders)[row]);  // latest version
+                OrderInfo* infoWindow = new OrderInfo(*orderCopy);
+                infoWindow->setAttribute(Qt::WA_DeleteOnClose);
+                infoWindow->show();
+            }
+        });
+    }
+
+    ui->orderList->resizeColumnsToContents();
+    ui->orderList->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
+
 
 void adminPage::on_logout_clicked()
 {
