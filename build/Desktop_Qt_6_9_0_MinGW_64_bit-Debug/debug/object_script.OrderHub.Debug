@@ -1,10 +1,12 @@
 debug/adminpage.o
 debug/main.o
 debug/login.o
+debug/orderinfo.o
 debug/payment.o
 debug/store.o
 debug/userpage.o
 debug/moc_adminpage.o
 debug/moc_login.o
+debug/moc_orderinfo.o
 debug/moc_payment.o
 debug/moc_userpage.o

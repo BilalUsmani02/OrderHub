@@ -12,6 +12,7 @@ SOURCES += \
     adminpage.cpp \
     main.cpp \
     login.cpp \
+    orderinfo.cpp \
     payment.cpp \
     store.cpp \
     userpage.cpp
@@ -19,6 +20,7 @@ SOURCES += \
 HEADERS += \
     adminpage.h \
     login.h \
+    orderinfo.h \
     payment.h \
     store.h \
     userpage.h
@@ -26,6 +28,7 @@ HEADERS += \
 FORMS += \
     adminpage.ui \
     login.ui \
+    orderinfo.ui \
     payment.ui \
     userpage.ui
 

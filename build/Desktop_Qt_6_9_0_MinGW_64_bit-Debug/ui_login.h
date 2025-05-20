@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
@@ -23,82 +24,97 @@ class Ui_login
 {
 public:
     QWidget *centralwidget;
-    QLineEdit *iusername;
+    QLabel *label_4;
     QLabel *label;
+    QLineEdit *iusername;
     QLabel *label_2;
     QLineEdit *ipassword;
     QPushButton *loginbutton;
     QLabel *errormsg;
-    QLineEdit *rusername;
-    QLineEdit *rpassword;
-    QLabel *label_3;
-    QLabel *label_4;
     QLabel *label_5;
+    QLabel *label_3;
+    QLineEdit *rusername;
     QLabel *label_6;
+    QLineEdit *rpassword;
     QPushButton *registerBtn;
     QPushButton *LP;
     QPushButton *RP;
     QLabel *label_7;
+    QCheckBox *loginShowPassword;
+    QCheckBox *registerShowPassword;
+    QLabel *errormsg2;
 
     void setupUi(QMainWindow *login)
     {
         if (login->objectName().isEmpty())
             login->setObjectName("login");
-        login->resize(1044, 600);
+        login->resize(1127, 538);
         centralwidget = new QWidget(login);
         centralwidget->setObjectName("centralwidget");
-        iusername = new QLineEdit(centralwidget);
-        iusername->setObjectName("iusername");
-        iusername->setGeometry(QRect(718, 211, 113, 28));
+        label_4 = new QLabel(centralwidget);
+        label_4->setObjectName("label_4");
+        label_4->setGeometry(QRect(400, 160, 121, 41));
+        label_4->setAlignment(Qt::AlignmentFlag::AlignCenter);
         label = new QLabel(centralwidget);
         label->setObjectName("label");
-        label->setGeometry(QRect(578, 211, 81, 21));
+        label->setGeometry(QRect(280, 220, 100, 21));
+        iusername = new QLineEdit(centralwidget);
+        iusername->setObjectName("iusername");
+        iusername->setGeometry(QRect(400, 220, 200, 28));
         label_2 = new QLabel(centralwidget);
         label_2->setObjectName("label_2");
-        label_2->setGeometry(QRect(578, 271, 81, 21));
+        label_2->setGeometry(QRect(280, 270, 100, 21));
         ipassword = new QLineEdit(centralwidget);
         ipassword->setObjectName("ipassword");
-        ipassword->setGeometry(QRect(718, 271, 113, 28));
+        ipassword->setGeometry(QRect(400, 270, 200, 28));
         ipassword->setEchoMode(QLineEdit::EchoMode::Password);
         loginbutton = new QPushButton(centralwidget);
         loginbutton->setObjectName("loginbutton");
-        loginbutton->setGeometry(QRect(730, 350, 83, 29));
+        loginbutton->setGeometry(QRect(400, 370, 100, 30));
         errormsg = new QLabel(centralwidget);
         errormsg->setObjectName("errormsg");
-        errormsg->setGeometry(QRect(558, 161, 311, 31));
-        rusername = new QLineEdit(centralwidget);
-        rusername->setObjectName("rusername");
-        rusername->setGeometry(QRect(720, 210, 113, 28));
-        rpassword = new QLineEdit(centralwidget);
-        rpassword->setObjectName("rpassword");
-        rpassword->setGeometry(QRect(720, 270, 113, 28));
-        rpassword->setEchoMode(QLineEdit::EchoMode::Password);
-        label_3 = new QLabel(centralwidget);
-        label_3->setObjectName("label_3");
-        label_3->setGeometry(QRect(580, 210, 71, 20));
-        label_4 = new QLabel(centralwidget);
-        label_4->setObjectName("label_4");
-        label_4->setGeometry(QRect(740, 140, 111, 41));
+        errormsg->setGeometry(QRect(280, 180, 400, 30));
+        errormsg->setAlignment(Qt::AlignmentFlag::AlignCenter);
         label_5 = new QLabel(centralwidget);
         label_5->setObjectName("label_5");
-        label_5->setGeometry(QRect(740, 150, 81, 31));
+        label_5->setGeometry(QRect(400, 170, 121, 31));
+        label_5->setAlignment(Qt::AlignmentFlag::AlignCenter);
+        label_3 = new QLabel(centralwidget);
+        label_3->setObjectName("label_3");
+        label_3->setGeometry(QRect(280, 220, 100, 20));
+        rusername = new QLineEdit(centralwidget);
+        rusername->setObjectName("rusername");
+        rusername->setGeometry(QRect(400, 220, 200, 28));
         label_6 = new QLabel(centralwidget);
         label_6->setObjectName("label_6");
-        label_6->setGeometry(QRect(580, 270, 63, 20));
+        label_6->setGeometry(QRect(280, 270, 100, 20));
+        rpassword = new QLineEdit(centralwidget);
+        rpassword->setObjectName("rpassword");
+        rpassword->setGeometry(QRect(400, 270, 200, 28));
+        rpassword->setEchoMode(QLineEdit::EchoMode::Password);
         registerBtn = new QPushButton(centralwidget);
         registerBtn->setObjectName("registerBtn");
-        registerBtn->setGeometry(QRect(730, 350, 83, 29));
+        registerBtn->setGeometry(QRect(400, 370, 100, 30));
         LP = new QPushButton(centralwidget);
         LP->setObjectName("LP");
-        LP->setGeometry(QRect(130, 150, 83, 29));
+        LP->setGeometry(QRect(30, 20, 100, 30));
         RP = new QPushButton(centralwidget);
         RP->setObjectName("RP");
-        RP->setGeometry(QRect(130, 270, 121, 29));
+        RP->setGeometry(QRect(30, 60, 100, 30));
         label_7 = new QLabel(centralwidget);
         label_7->setObjectName("label_7");
-        label_7->setGeometry(QRect(380, 0, 281, 121));
+        label_7->setGeometry(QRect(840, 30, 281, 121));
         label_7->setPixmap(QPixmap(QString::fromUtf8("order-hub-high-resolution-logo.png")));
         label_7->setScaledContents(true);
+        loginShowPassword = new QCheckBox(centralwidget);
+        loginShowPassword->setObjectName("loginShowPassword");
+        loginShowPassword->setGeometry(QRect(620, 270, 93, 26));
+        registerShowPassword = new QCheckBox(centralwidget);
+        registerShowPassword->setObjectName("registerShowPassword");
+        registerShowPassword->setGeometry(QRect(620, 270, 93, 26));
+        errormsg2 = new QLabel(centralwidget);
+        errormsg2->setObjectName("errormsg2");
+        errormsg2->setGeometry(QRect(400, 300, 351, 61));
         login->setCentralWidget(centralwidget);
 
         retranslateUi(login);
@@ -108,19 +124,22 @@ public:
 
     void retranslateUi(QMainWindow *login)
     {
-        login->setWindowTitle(QCoreApplication::translate("login", "login", nullptr));
+        login->setWindowTitle(QCoreApplication::translate("login", "Login", nullptr));
+        label_4->setText(QCoreApplication::translate("login", "LOGIN", nullptr));
         label->setText(QCoreApplication::translate("login", "User Name", nullptr));
         label_2->setText(QCoreApplication::translate("login", "Password", nullptr));
-        loginbutton->setText(QCoreApplication::translate("login", "login", nullptr));
+        loginbutton->setText(QCoreApplication::translate("login", "Login", nullptr));
         errormsg->setText(QString());
-        label_3->setText(QCoreApplication::translate("login", "UserName", nullptr));
-        label_4->setText(QCoreApplication::translate("login", "LOGIN", nullptr));
         label_5->setText(QCoreApplication::translate("login", "REGISTER", nullptr));
+        label_3->setText(QCoreApplication::translate("login", "User Name", nullptr));
         label_6->setText(QCoreApplication::translate("login", "Password", nullptr));
         registerBtn->setText(QCoreApplication::translate("login", "Register", nullptr));
         LP->setText(QCoreApplication::translate("login", "Login Page", nullptr));
         RP->setText(QCoreApplication::translate("login", "Register Page", nullptr));
         label_7->setText(QString());
+        loginShowPassword->setText(QCoreApplication::translate("login", "Show", nullptr));
+        registerShowPassword->setText(QCoreApplication::translate("login", "Show", nullptr));
+        errormsg2->setText(QString());
     } // retranslateUi
 
 };

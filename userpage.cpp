@@ -1,12 +1,13 @@
 #include "userpage.h"
 #include "ui_userpage.h"
 #include "payment.h"
+#include "orderinfo.h"
 #include <QPushButton>
 #include <QMessageBox>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QString>
-#include <QDebug>  // Add this for qDebug
+#include <QDebug>
 
 userPage::userPage(User& user,QWidget *parent)
     : QWidget(parent), ui(new Ui::userPage),
@@ -166,6 +167,8 @@ userPage::~userPage()
 void userPage::on_tabWidget_tabBarClicked(int index)
 {
     qDebug() << "Tab switched to index:" << index;
+    ui->address->hide();
+    ui->label_2->hide();
     ui->orderTotal->hide();
     ui->label->hide();
     ui->placeOrder->hide();
@@ -174,12 +177,12 @@ void userPage::on_tabWidget_tabBarClicked(int index)
     ui->cartList->setRowCount(0);
     ui->cartList->setColumnCount(0);
 
-    const int productTabIndex = 0;
-    const int cartTabIndex = 2;
 
-    if (index == cartTabIndex && !order.getCart().empty()) {
+    if (index == 2 && !order.getCart().empty()) {
         qDebug() << "Switching to Cart tab with non-empty cart";
         populateCartTable(order);
+        ui->address->show();
+        ui->label_2->show();
         ui->orderTotal->show();
         ui->label->show();
         ui->placeOrder->show();
@@ -189,14 +192,15 @@ void userPage::on_tabWidget_tabBarClicked(int index)
         qDebug() << "Switching to Order History tab";
         vector<Order>* orders = Store::getInstance()->allOrders();
         ui->orderList->setRowCount(0);
-        ui->orderList->setColumnCount(3); // Now 3 columns
-        ui->orderList->setHorizontalHeaderLabels(QStringList() << "Order ID" << "Status" << "Total Price");
+        ui->orderList->setColumnCount(4); // Now 4 columns
+        ui->orderList->setHorizontalHeaderLabels(QStringList() << "Order ID" << "Status" << "Total Price" << " ");
+
 
 
         if (orders->empty()) {
             ui->orderList->setRowCount(1);
             ui->orderList->setItem(0, 0, new QTableWidgetItem("No orders"));
-            ui->orderList->setSpan(0, 0, 1, 3); // Spanning 3 columns
+            ui->orderList->setSpan(0, 0, 1, 4); // Spanning 3 columns
         }
 
         bool ord = false;
@@ -208,15 +212,26 @@ void userPage::on_tabWidget_tabBarClicked(int index)
                 ui->orderList->setItem(row, 0, new QTableWidgetItem(QString::number(order.getId())));
                 ui->orderList->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(order.getStatus())));
 
-
-                // Get total price and insert it
                 float totalPrice = order.calculateTotalPrice();
                 QString priceStr = QString("Rs. %1").arg(totalPrice, 0, 'f', 2);
                 ui->orderList->setItem(row, 2, new QTableWidgetItem(priceStr));
 
+                // Add View Button
+                QPushButton* viewButton = new QPushButton("View");
+                ui->orderList->setCellWidget(row, 3, viewButton);
+
+                // Connect view button with a lambda capturing the order object
+                Order* orderCopy =new Order(order);
+                connect(viewButton, &QPushButton::clicked, this, [orderCopy]() {
+                    OrderInfo* infoWindow = new OrderInfo(*orderCopy); // Assuming OrderInfo takes an Order
+                    infoWindow->setAttribute(Qt::WA_DeleteOnClose);
+                    infoWindow->show();
+                });
+
                 ++row;
             }
         }
+
 
         if (!ord) {
             ui->orderList->setRowCount(1);
@@ -232,12 +247,19 @@ void userPage::on_tabWidget_tabBarClicked(int index)
 
 void userPage::on_placeOrder_clicked()
 {
-    qDebug() << "Place Order clicked";
-    Payment* paymentWindow = new Payment(order);
-    connect(paymentWindow, &Payment::destroyed, this, &userPage::show);
-    connect(paymentWindow, &Payment::deleteOrder, this, &userPage::onPaymentFinished);
-    paymentWindow->show();
-    this->hide();
+    QString addr=ui->address->text();
+    if (addr.isEmpty()){
+        QMessageBox::warning(this, "Input Error", "Please enter address");
+        return;
+    }else{
+        order.setAddress(addr.toStdString());
+        qDebug() << "Place Order clicked";
+        Payment* paymentWindow = new Payment(order);
+        connect(paymentWindow, &Payment::destroyed, this, &userPage::show);
+        connect(paymentWindow, &Payment::deleteOrder, this, &userPage::onPaymentFinished);
+        paymentWindow->show();
+        this->hide();
+    }
 }
 
 void userPage::onPaymentFinished()
@@ -247,6 +269,8 @@ void userPage::onPaymentFinished()
     qDebug() << "Payment finished. Clearing order.";
 
 }
+
+
 
 void userPage::on_logout_clicked()
 {

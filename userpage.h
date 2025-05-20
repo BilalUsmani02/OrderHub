@@ -20,7 +20,6 @@ signals:
 public slots:
     void onPaymentFinished(); // Slot to handle payment completion
 
-
 private slots:
     void on_tabWidget_tabBarClicked(int index);
     void on_placeOrder_clicked();

@@ -46,6 +46,7 @@ public:
     string getPaymentType()const;
     float getAmountPaid()const;
     virtual void pay(float amount) = 0;
+    virtual ~PaymentMethod();
 };
 
 class CardPayment : public PaymentMethod {
@@ -55,14 +56,12 @@ class CardPayment : public PaymentMethod {
 
 public:
     CardPayment(string cn, string exp, string cvv,float amt);
-
     void pay(float amount);
 };
 
 class CashPayment : public PaymentMethod {
 public:
     CashPayment();
-
     void pay(float amount);
 };
 
@@ -70,7 +69,6 @@ class EasyPaisaPayment : public PaymentMethod {
     string accountNumber;
 public:
     EasyPaisaPayment(string acc);
-
     void pay(float amount);
 };
 
@@ -78,13 +76,13 @@ class JazzCashPayment : public PaymentMethod {
     string accountNumber;
 public:
     JazzCashPayment(string acc);
-
     void pay(float amount);
 };
 
 class Order{
     static int nextId;
     int orderId, userId;
+    string address;
     string status;
     vector<OrderItem> cart;
     PaymentMethod* paymentMethod;
@@ -96,12 +94,15 @@ public:
     const vector<OrderItem>& getCart() const ;
     int getId() const;
     int getUserId() const;
+    string getAddress()const;
     string getStatus() const ;
-    string getPaymentMethod() const;
+    string getPaymentType() const;
+    PaymentMethod* getPaymentMethod() const;
     void removeItem(int productId);
     void decreaseQuantity(int productId);
     void increaseQuantity(int productId);
     void setStatus(string stat);
+    void setAddress(string add);
     void setPaymentMethod(PaymentMethod* pm);
     void addItem(const Product& product, int quantity);    
     void clearOrder();

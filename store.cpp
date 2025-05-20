@@ -45,7 +45,7 @@ void OrderItem::display() const{
 
 string PaymentMethod::getPaymentType()const{return paymentType;}
 float PaymentMethod::getAmountPaid()const{return amountPaid;}
-
+PaymentMethod::~PaymentMethod(){}
 
 CardPayment::CardPayment(string cn, string exp, string cvv,float amt) {
     cardNumber=cn;
@@ -120,10 +120,13 @@ Order::~Order(){
 const vector<OrderItem>& Order::getCart() const { return cart; }
 int Order::getId() const{return orderId;}
 int Order::getUserId() const{return userId;}
+string Order::getAddress() const {return address;}
 string Order::getStatus() const {return status;}
-string Order::getPaymentMethod() const{return paymentMethod->getPaymentType();}
+string Order::getPaymentType() const{return paymentMethod->getPaymentType();}
+PaymentMethod* Order::getPaymentMethod() const{return paymentMethod;}
 
 void Order::setStatus(string stat){status=stat;}
+void Order::setAddress(string add){address=add;}
 void Order::setPaymentMethod(PaymentMethod* pm){
     paymentMethod = pm;
 }
@@ -209,7 +212,9 @@ int Order::nextId = 1;
 Store::Store(){
     loadProducts();
     loadOrders();
+
 }
+
 void Store::loadProducts(){
     ifstream fin("products.bin", ios::binary);
     if (!fin) {
@@ -327,6 +332,7 @@ void Store::saveOrders(){
     }
     fout.close();
 }
+
 void Store::addProduct(const Product& p){products.push_back(p);}
 void Store::addOrder(Order o){orders.push_back(o);}
 

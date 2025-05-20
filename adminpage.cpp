@@ -15,7 +15,6 @@ adminPage::adminPage(QWidget *parent)
     populateProdList();
     populateOrdList();
 
-
 }
 adminPage::~adminPage()
 {

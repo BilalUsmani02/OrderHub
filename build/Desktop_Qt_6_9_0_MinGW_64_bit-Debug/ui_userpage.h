@@ -34,13 +34,15 @@ public:
     QLabel *label;
     QLineEdit *orderTotal;
     QPushButton *placeOrder;
+    QLabel *label_2;
+    QLineEdit *address;
     QPushButton *logout;
 
     void setupUi(QWidget *userPage)
     {
         if (userPage->objectName().isEmpty())
             userPage->setObjectName("userPage");
-        userPage->resize(1163, 598);
+        userPage->resize(1160, 553);
         tabWidget = new QTabWidget(userPage);
         tabWidget->setObjectName("tabWidget");
         tabWidget->setGeometry(QRect(10, 20, 1141, 521));
@@ -62,17 +64,23 @@ public:
         Cart->setObjectName("Cart");
         cartList = new QTableWidget(Cart);
         cartList->setObjectName("cartList");
-        cartList->setGeometry(QRect(20, 20, 1101, 411));
+        cartList->setGeometry(QRect(20, 20, 831, 411));
         label = new QLabel(Cart);
         label->setObjectName("label");
-        label->setGeometry(QRect(660, 450, 63, 20));
+        label->setGeometry(QRect(870, 310, 63, 20));
         orderTotal = new QLineEdit(Cart);
         orderTotal->setObjectName("orderTotal");
-        orderTotal->setGeometry(QRect(730, 450, 113, 28));
+        orderTotal->setGeometry(QRect(930, 310, 113, 28));
         orderTotal->setReadOnly(true);
         placeOrder = new QPushButton(Cart);
         placeOrder->setObjectName("placeOrder");
-        placeOrder->setGeometry(QRect(1020, 440, 91, 29));
+        placeOrder->setGeometry(QRect(990, 380, 91, 29));
+        label_2 = new QLabel(Cart);
+        label_2->setObjectName("label_2");
+        label_2->setGeometry(QRect(870, 60, 63, 20));
+        address = new QLineEdit(Cart);
+        address->setObjectName("address");
+        address->setGeometry(QRect(870, 90, 251, 28));
         tabWidget->addTab(Cart, QString());
         logout = new QPushButton(userPage);
         logout->setObjectName("logout");
@@ -94,6 +102,7 @@ public:
         label->setText(QCoreApplication::translate("userPage", "Total   =", nullptr));
         orderTotal->setText(QCoreApplication::translate("userPage", "0", nullptr));
         placeOrder->setText(QCoreApplication::translate("userPage", "Place Order", nullptr));
+        label_2->setText(QCoreApplication::translate("userPage", "Address:", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(Cart), QCoreApplication::translate("userPage", "Cart", nullptr));
         logout->setText(QCoreApplication::translate("userPage", "Logout", nullptr));
     } // retranslateUi
