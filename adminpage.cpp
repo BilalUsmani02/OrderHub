@@ -22,7 +22,6 @@ adminPage::~adminPage()
 }
 
 
-
 void adminPage::onItemChanged(QTableWidgetItem *item) {
     int row = item->row();
     int col = item->column();

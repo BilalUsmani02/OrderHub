@@ -256,7 +256,6 @@ vector<Order>* Store::allOrders() {
 Store::~Store(){
     saveProducts();
     saveOrders();
-    qDebug("Store destructor");
 }
 
 void Store::saveProducts(){
