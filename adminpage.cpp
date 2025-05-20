@@ -30,10 +30,10 @@ void adminPage::onItemChanged(QTableWidgetItem *item) {
     if (row < 0 || row >= static_cast<int>(prods->size()))
         return;
 
-    if (col == 0) { // Name edited
+    if (col == 0) {
         std::string newName = item->text().toStdString();
         (*prods)[row].setName(newName);
-    } else if (col == 1) { // Price edited
+    } else if (col == 1) {
         bool ok;
         float newPrice = item->text().toFloat(&ok);
         if (ok) {
@@ -72,11 +72,11 @@ void adminPage::populateProdList(){
             ui->productList->insertRow(i);
 
             QTableWidgetItem* nameItem = new QTableWidgetItem(QString::fromStdString(product.getName()));
-            nameItem->setFlags(nameItem->flags() | Qt::ItemIsEditable); // Editable
+            nameItem->setFlags(nameItem->flags() | Qt::ItemIsEditable);
             ui->productList->setItem(i, 0, nameItem);
 
             QTableWidgetItem* priceItem = new QTableWidgetItem(QString::number(product.getPrice(), 'f', 2));
-            priceItem->setFlags(priceItem->flags() | Qt::ItemIsEditable); // Editable
+            priceItem->setFlags(priceItem->flags() | Qt::ItemIsEditable);
             ui->productList->setItem(i, 1, priceItem);
 
         }
@@ -122,15 +122,15 @@ void adminPage::populateOrdList() {
             }
         });
 
-        // "View" button
+
         QPushButton* viewButton = new QPushButton("View");
         ui->orderList->setCellWidget(row, 3, viewButton);
 
-        // Create new Order copy on demand when button is clicked
+
         connect(viewButton, &QPushButton::clicked, this, [row]() {
             vector<Order>* orders = Store::getInstance()->allOrders();
             if (row >= 0 && row < static_cast<int>(orders->size())) {
-                Order* orderCopy = new Order((*orders)[row]);  // latest version
+                Order* orderCopy = new Order((*orders)[row]);
                 OrderInfo* infoWindow = new OrderInfo(*orderCopy);
                 infoWindow->setAttribute(Qt::WA_DeleteOnClose);
                 infoWindow->show();

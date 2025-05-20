@@ -2,7 +2,7 @@
 #include "ui_payment.h"
 #include <QWidget>
 #include <QMessageBox>
-#include <QDebug> // Ensure debug is included
+#include <QDebug>
 
 Payment::Payment(Order& order, QWidget *parent)
     : QWidget(parent),
@@ -10,20 +10,20 @@ Payment::Payment(Order& order, QWidget *parent)
     ord(order),
     store(Store::getInstance())
 {
-    qDebug() << "[Payment] Constructor called";
+    
 
     connect(this, &Payment::paymentCompleted, this, &Payment::onPaymentCompleted);
 
     Store* store = Store::getInstance();
-    qDebug() << "[Payment] Store instance obtained";
+    
 
     ui->setupUi(this);
-    qDebug() << "[Payment] UI setup complete";
+    
 
     hideAllPaymentFields();
 
     const auto& cart = ord.getCart();
-    qDebug() << "[Payment] Cart size:" << cart.size();
+    
 
     ui->cartList->clear();
     ui->cartList->setRowCount(0);
@@ -33,7 +33,7 @@ Payment::Payment(Order& order, QWidget *parent)
 
     for (int i = 0; i < static_cast<int>(cart.size()); ++i) {
         const OrderItem& it = cart[i];
-        qDebug() << "[Payment] Adding item to cart table:" << QString::fromStdString(it.getName());
+        
 
         ui->cartList->insertRow(i);
 
@@ -54,13 +54,13 @@ Payment::Payment(Order& order, QWidget *parent)
     }
 
     QString oTotal = QString::number(ord.calculateTotalPrice(), 'f', 2);
-    qDebug() << "[Payment] Total order price:" << oTotal;
+    
     ui->orderTotal->setText(oTotal);
 }
 
 void Payment::hideAllPaymentFields()
 {
-    qDebug() << "[Payment] Hiding all payment fields";
+    
     ui->lcardnum->setVisible(false);
     ui->lexp->setVisible(false);
     ui->lcvv->setVisible(false);
@@ -73,44 +73,44 @@ void Payment::hideAllPaymentFields()
 
 Payment::~Payment()
 {
-    qDebug() << "[Payment] Destructor called";
+    
     delete ui;
 }
 
 void Payment::on_paymentType_currentIndexChanged(int index)
 {
-    qDebug() << "[Payment] Payment type changed. Index:" << index;
+    
     hideAllPaymentFields();
 
-    if (index == 1) { // Card
+    if (index == 1) {
         ui->lcardnum->setVisible(true);
         ui->lexp->setVisible(true);
         ui->lcvv->setVisible(true);
         ui->cardnum->setVisible(true);
         ui->exp->setVisible(true);
         ui->cvv->setVisible(true);
-        qDebug() << "[Payment] Showing card input fields";
+        
     } else if (index == 2 || index == 3) {
         ui->accnum->setVisible(true);
         ui->laccnum->setVisible(true);
-        qDebug() << "[Payment] Showing account number field";
+        
     }
 }
 
 void Payment::on_placeOrder_clicked()
 {
-    qDebug() << "[Payment] Place order clicked";
+    
     int idx = ui->paymentType->currentIndex();
     PaymentMethod* payment = nullptr;
     QString err;
     bool ok = true;
 
     if (idx == 0) {
-        qDebug() << "[Payment] Cash selected";
+        
         payment = new CashPayment();
         ord.setPayMethod("Cash");
     } else if (idx == 1) {
-        qDebug() << "[Payment] Card selected";
+        
         QString cardNo = ui->cardnum->text();
         QString exp = ui->exp->text();
         QString cvv = ui->cvv->text();
@@ -133,19 +133,19 @@ void Payment::on_placeOrder_clicked()
         }
 
         if (ok) {
-            qDebug() << "[Payment] Card data valid. Creating CardPayment object.";
+            
             payment = new CardPayment(cardNo.toStdString(), exp.toStdString(), cvv.toStdString(), ord.calculateTotalPrice());
             ord.setPayMethod("Card");
         } else {
-            qDebug() << "[Payment] Card data invalid:" << err;
+            
         }
 
     } else if (idx == 2 || idx == 3) {
-        qDebug() << "[Payment] EasyPaisa/JazzCash selected";
+        
         QString acc = ui->laccnum->text().trimmed();
         QRegularExpression accRegex("^03\\d{9}$");
 
-        qDebug() << "[Payment] Entered account:" << acc;
+        
 
         if (!accRegex.match(acc).hasMatch()) {
             err = "Account number must be 11 digits and start with 03.";
@@ -158,7 +158,7 @@ void Payment::on_placeOrder_clicked()
                 payment = new JazzCashPayment(acc.toStdString());
                 ord.setPayMethod("JazzCash");}
 
-            qDebug() << "[Payment] Account number valid. Payment object created.";
+            
         }
     }
 
@@ -167,7 +167,7 @@ void Payment::on_placeOrder_clicked()
         return;
     }
 
-    qDebug() << "[Payment] Setting payment method and storing order";
+    
     ord.setPaymentMethod(payment);
     store->addOrder(ord);
 
@@ -179,6 +179,6 @@ void Payment::on_placeOrder_clicked()
 }
 
 void Payment::onPaymentCompleted() {
-    qDebug() << "[Payment] Payment completed signal received. Closing window.";
+    
     delete this;
 }

@@ -20,4 +20,4 @@ private:
     Ui::OrderInfo *ui;
 };
 
-#endif // ORDERINFO_H
+#endif

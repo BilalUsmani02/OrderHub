@@ -58,6 +58,7 @@ class CardPayment : public PaymentMethod {
 
 public:
     CardPayment(string cn, string exp, string cvv,float amt);
+    CardPayment();
     void pay(float amount);
 };
 
@@ -71,6 +72,7 @@ class EasyPaisaPayment : public PaymentMethod {
     string accountNumber;
 public:
     EasyPaisaPayment(string acc);
+    EasyPaisaPayment();
     void pay(float amount);
 };
 
@@ -78,6 +80,8 @@ class JazzCashPayment : public PaymentMethod {
     string accountNumber;
 public:
     JazzCashPayment(string acc);
+    JazzCashPayment();
+
     void pay(float amount);
 };
 

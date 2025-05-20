@@ -23,7 +23,7 @@ void Product::display()const{
     cout<<"Name: "<<name<<endl<<"Price per unit: "<<price<<endl;
 }
 int OrderItem::getId() const {
-    return Product::getId(); // Or return the internal id
+    return Product::getId(); 
 }
 void OrderItem::setQuantity(int q) {
     this->quantity = q;
@@ -143,10 +143,10 @@ void Order::addItemToCart(OrderItem item) {
     for (auto& i : cart) {
         if (item.getId() == i.getId()) {
             i.setQuantity(i.getQuantity() + item.getQuantity());
-            return;  // item updated, done
+            return;  
         }
     }
-    cart.push_back(item);  // not found, add new
+    cart.push_back(item);  
 }
 
 
@@ -222,7 +222,7 @@ Store::Store(){
 void Store::loadProducts(){
     ifstream fin("products.bin", ios::binary);
     if (!fin) {
-        ofstream fout("products.bin", ios::binary); // create file
+        ofstream fout("products.bin", ios::binary); 
         return;
     }
     int id;
@@ -273,7 +273,7 @@ void Store::saveProducts(){
     }
     fout.close();
 }
-// In Store.cpp
+
 
 void Store::saveOrders() {
     ofstream fout("orders.bin", ios::binary | ios::trunc);
@@ -524,61 +524,61 @@ void Store::trackOrder(int orderId){
         cout<<"All Products:\n";
         store.displayProducts();
     }
-    // void User::placeOrder(Store& store) {
-    //     Order order(id);
-    //     int pid, qty;
-    //     char choice;
+    void User::placeOrder(Store& store) {
+        Order order(id);
+        int pid, qty;
+        char choice;
 
-    //     do {
-    //         cout << "Enter Product ID to add: ";
-    //         cin >> pid;
-    //         cout << "Quantity: ";
-    //         cin >> qty;
-    //         Product* product = store.getProductById(pid);
-    //         if (product) {
-    //             order.addItem(OrderItem(pid, product->getName(), product->getPrice(), qty));
-    //         } else {
-    //             cout << "Product not found.\n";
-    //         }
-    //         cout << "Add more items? (y/n): ";
-    //         cin >> choice;
-    //     } while (choice == 'y');
+        do {
+            cout << "Enter Product ID to add: ";
+            cin >> pid;
+            cout << "Quantity: ";
+            cin >> qty;
+            Product* product = store.getProductById(pid);
+            if (product) {
+                order.addItem(OrderItem(pid, product->getName(), product->getPrice(), qty));
+            } else {
+                cout << "Product not found.\n";
+            }
+            cout << "Add more items? (y/n): ";
+            cin >> choice;
+        } while (choice == 'y');
 
-    //     order.display();
-    //     cout << "Proceed with payment? (y/n): ";
-    //     cin >> choice;
+        order.display();
+        cout << "Proceed with payment? (y/n): ";
+        cin >> choice;
 
-    //     if (choice == 'y') {
-    //         int paymentOption;
-    //         PaymentMethod* payment = nullptr;
-    //         cout << "Choose payment method (1. Card, 2. Cash, 3. EasyPaisa, 4. JazzCash): ";
-    //         cin >> paymentOption;
+        if (choice == 'y') {
+            int paymentOption;
+            PaymentMethod* payment = nullptr;
+            cout << "Choose payment method (1. Card, 2. Cash, 3. EasyPaisa, 4. JazzCash): ";
+            cin >> paymentOption;
 
-    //         switch (paymentOption) {
-    //         case 1:
-    //             payment = new CardPayment();
-    //             break;
-    //         case 2:
-    //             payment = new CashPayment();
-    //             break;
-    //         case 3:
-    //             payment = new EasyPaisaPayment();
-    //             break;
-    //         case 4:
-    //             payment = new JazzCashPayment();
-    //             break;
-    //         default:
-    //             cout << "Invalid option. Defaulting to Cash.\n";
-    //             payment = new CashPayment();
-    //         }
+            switch (paymentOption) {
+            case 1:
+                payment = new CardPayment();
+                break;
+            case 2:
+                payment = new CashPayment();
+                break;
+            case 3:
+                payment = new EasyPaisaPayment();
+                break;
+            case 4:
+                payment = new JazzCashPayment();
+                break;
+            default:
+                cout << "Invalid option. Defaulting to Cash.\n";
+                payment = new CashPayment();
+            }
 
-    //         order.setPaymentMethod(payment);
-    //         store.addOrder(order);
-    //         cout << "Order placed successfully!\n";
-    //     } else {
-    //         cout << "Order cancelled.\n";
-    //     }
-    // }
+            order.setPaymentMethod(payment);
+            store.addOrder(order);
+            cout << "Order placed successfully!\n";
+        } else {
+            cout << "Order cancelled.\n";
+        }
+    }
 
     void User::trackOrder(Store& store) {
         int orderId;

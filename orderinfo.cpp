@@ -9,28 +9,28 @@ OrderInfo::OrderInfo(const Order &order, QWidget *parent)
     this->setWindowTitle("Order Details");
 
 
-    // Set order ID
+    
     ui->orderId->setText(QString::number(order.getId()));
     ui->orderId->setReadOnly(true);
-    qDebug("id");
+    
 
-    // Set status
+    
     ui->status->setText(QString::fromStdString(order.getStatus()));
     ui->status->setReadOnly(true);
-    qDebug("stat");
+    
 
-    // Set address
+    
     ui->address->setText(QString::fromStdString(order.getAddress()));
     ui->address->setReadOnly(true);
-    qDebug("address");
+    
 
-    // Set payment method
+    
     ui->payMethod->setText(QString::fromStdString(order.getPayMethod()));
     ui->payMethod->setReadOnly(true);
-    qDebug("payMethod");
+    
 
-    qDebug("Cart");
-    // Configure cart table
+    
+    
     const auto& cart = order.getCart();
     ui->cartList->setColumnCount(4);
     ui->cartList->setHorizontalHeaderLabels({"Product Name", "Unit Price", "Quantity", "Subtotal"});

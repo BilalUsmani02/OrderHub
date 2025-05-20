@@ -19,7 +19,7 @@ signals:
     void cartUpdated(const Order&);
     void logoutSignal();
 public slots:
-    void onPaymentFinished(); // Slot to handle payment completion
+    void onPaymentFinished();
 
 private slots:
     void on_tabWidget_tabBarClicked(int index);
@@ -33,4 +33,4 @@ private:
     void populateCartTable(const Order& ord);
     vector<Product>* prods;
 };
-#endif // USERPAGE_H
+#endif

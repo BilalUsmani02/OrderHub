@@ -34,4 +34,4 @@ private:
     Store* store;
 };
 
-#endif // PAYMENT_H
+#endif

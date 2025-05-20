@@ -13,13 +13,13 @@ userPage::userPage(User& user,QWidget *parent)
     : QWidget(parent), ui(new Ui::userPage),
     currentUser(user.getId(),user.getName()), order(currentUser.getId())
 {
-    qDebug() << "Initializing userPage for user ID:" << currentUser.getId();
+    
 
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
     this->show();
 
-    // inside userPage constructor after setupUi
+    
 
     vector<Product>* prods = Store::getInstance()->allProducts();
     ui->productList->setColumnCount(4);
@@ -40,7 +40,7 @@ userPage::userPage(User& user,QWidget *parent)
         priceItem->setFlags(priceItem->flags() & ~Qt::ItemIsEditable);
         ui->productList->setItem(i, 1, priceItem);
 
-        // Create quantity widget
+        
         auto* quantityWidget = new QWidget();
         auto* layout = new QHBoxLayout(quantityWidget);
         layout->setContentsMargins(0, 0, 0, 0);
@@ -60,11 +60,11 @@ userPage::userPage(User& user,QWidget *parent)
         layout->addWidget(plusBtn);
         ui->productList->setCellWidget(i, 2, quantityWidget);
 
-        // Create Add button
+        
         auto* addButton = new QPushButton("Add");
         ui->productList->setCellWidget(i, 3, addButton);
 
-        // Connect buttons using value captures (by copy)
+        
         connect(plusBtn, &QPushButton::clicked, this, [qtyLabel]() {
             int qty = qtyLabel->text().toInt();
             qtyLabel->setText(QString::number(qty + 1));
@@ -88,7 +88,7 @@ userPage::userPage(User& user,QWidget *parent)
 
 void userPage::populateCartTable(const Order& ord)
 {
-    qDebug() << "Populating cart table";
+    
     const auto& cart = ord.getCart();
 
     ui->cartList->clear();
@@ -99,7 +99,7 @@ void userPage::populateCartTable(const Order& ord)
 
     for (int i = 0; i < static_cast<int>(cart.size()); ++i) {
         const OrderItem& it = cart[i];
-        qDebug() << "Cart item:" << QString::fromStdString(it.getName()) << "Qty:" << it.getQuantity();
+        
 
         ui->cartList->insertRow(i);
         QTableWidgetItem* nameItem = new QTableWidgetItem(QString::fromStdString(it.getName()));
@@ -130,14 +130,14 @@ void userPage::populateCartTable(const Order& ord)
 
         connect(plusBtn, &QPushButton::clicked, this, [=]() {
             int productId = it.Product::getId();
-            qDebug() << "Increasing quantity for product ID:" << productId;
+            
             order.increaseQuantity(productId);
             populateCartTable(order);
         });
 
         connect(minusBtn, &QPushButton::clicked, this, [=]() {
             int productId = it.Product::getId();
-            qDebug() << "Decreasing quantity for product ID:" << productId;
+            
             order.decreaseQuantity(productId);
             populateCartTable(order);
         });
@@ -147,26 +147,26 @@ void userPage::populateCartTable(const Order& ord)
 
         connect(rmvBtn, &QPushButton::clicked, this, [=]() {
             int productId = it.Product::getId();
-            qDebug() << "Removing product ID:" << productId << "from cart";
+            
             order.removeItem(productId);
             populateCartTable(order);
         });
     }
 
     QString oTotal = QString::number(order.calculateTotalPrice(), 'f', 2);
-    qDebug() << "Total Order Price:" << oTotal;
+    
     ui->orderTotal->setText(oTotal);
 }
 
 userPage::~userPage()
 {
     delete ui;
-    qDebug() << "Destroying userPage UI";
+    
 }
 
 void userPage::on_tabWidget_tabBarClicked(int index)
 {
-    qDebug() << "Tab switched to index:" << index;
+    
     ui->address->hide();
     ui->label_2->hide();
     ui->orderTotal->hide();
@@ -179,7 +179,7 @@ void userPage::on_tabWidget_tabBarClicked(int index)
 
 
     if (index == 2 && !order.getCart().empty()) {
-        qDebug() << "Switching to Cart tab with non-empty cart";
+        
         populateCartTable(order);
         ui->address->show();
         ui->label_2->show();
@@ -189,10 +189,10 @@ void userPage::on_tabWidget_tabBarClicked(int index)
     }
 
     if (index == 1) {
-        qDebug() << "Switching to Order History tab";
+        
         vector<Order>* orders = Store::getInstance()->allOrders();
         ui->orderList->setRowCount(0);
-        ui->orderList->setColumnCount(4); // Now 4 columns
+        ui->orderList->setColumnCount(4); 
         ui->orderList->setHorizontalHeaderLabels(QStringList() << "Order ID" << "Status" << "Total Price" << " ");
 
 
@@ -200,7 +200,7 @@ void userPage::on_tabWidget_tabBarClicked(int index)
         if (orders->empty()) {
             ui->orderList->setRowCount(1);
             ui->orderList->setItem(0, 0, new QTableWidgetItem("No orders"));
-            ui->orderList->setSpan(0, 0, 1, 4); // Spanning 3 columns
+            ui->orderList->setSpan(0, 0, 1, 4); 
         }
 
         bool ord = false;
@@ -216,14 +216,14 @@ void userPage::on_tabWidget_tabBarClicked(int index)
                 QString priceStr = QString("Rs. %1").arg(totalPrice, 0, 'f', 2);
                 ui->orderList->setItem(row, 2, new QTableWidgetItem(priceStr));
 
-                // Add View Button
+                
                 QPushButton* viewButton = new QPushButton("View");
                 ui->orderList->setCellWidget(row, 3, viewButton);
 
-                // Connect view button with a lambda capturing the order object
+                
                 Order* orderCopy =new Order(order);
                 connect(viewButton, &QPushButton::clicked, this, [orderCopy]() {
-                    OrderInfo* infoWindow = new OrderInfo(*orderCopy); // Assuming OrderInfo takes an Order
+                    OrderInfo* infoWindow = new OrderInfo(*orderCopy); 
                     infoWindow->setAttribute(Qt::WA_DeleteOnClose);
                     infoWindow->show();
                 });
@@ -236,7 +236,7 @@ void userPage::on_tabWidget_tabBarClicked(int index)
         if (!ord) {
             ui->orderList->setRowCount(1);
             ui->orderList->setItem(0, 0, new QTableWidgetItem("No orders"));
-            ui->orderList->setSpan(0, 0, 1, 3); // Spanning all 3 columns
+            ui->orderList->setSpan(0, 0, 1, 3); 
         }
 
         ui->orderList->resizeColumnsToContents();
@@ -253,7 +253,7 @@ void userPage::on_placeOrder_clicked()
         return;
     }else{
         order.setAddress(addr.toStdString());
-        qDebug() << "Place Order clicked";
+        
         Payment* paymentWindow = new Payment(order);
         connect(paymentWindow, &Payment::destroyed, this, &userPage::show);
         connect(paymentWindow, &Payment::deleteOrder, this, &userPage::onPaymentFinished);
@@ -266,7 +266,7 @@ void userPage::onPaymentFinished()
 {
     order.clearOrder();
     ui->tabWidget->setCurrentIndex(0);
-    qDebug() << "Payment finished. Clearing order.";
+    
 
 }
 
@@ -275,8 +275,8 @@ void userPage::onPaymentFinished()
 void userPage::on_logout_clicked()
 {
     emit logoutSignal();
-    qDebug()<<"loged out";
+    
     this->close();
-    qDebug() << "User logged out. Closing userPage.";
+    
 
 }

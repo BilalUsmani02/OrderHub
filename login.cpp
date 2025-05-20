@@ -25,7 +25,7 @@ login::login(QWidget *parent)
 {
 
     ui->setupUi(this);
-    qDebug() << "Login UI setup complete";
+
     hideAll();
     connect(ui->rusername, &QLineEdit::textChanged, this, &login::validateRegisterFields);
     connect(ui->rpassword, &QLineEdit::textChanged, this, &login::validateRegisterFields);
@@ -47,7 +47,7 @@ void login::on_loginbutton_clicked()
     QString p = ui->ipassword->text();
     ui->errormsg->setText(" ");
 
-    // 🔒 Special case: Check hardcoded admin credentials
+    
     if (u == "admin" && p == "admin123") {
         adminPage *adminWindow = new adminPage();
         connect(adminWindow, &adminPage::destroyed, this, &login::show);
@@ -76,7 +76,7 @@ void login::on_loginbutton_clicked()
             QString fileUsername = parts[1];
             QString filePassword = parts[2];
 
-            xorEncryptDecrypt(filePassword);  // Decrypt
+            xorEncryptDecrypt(filePassword);  
 
             if (fileUsername == u && filePassword == p) {
                 loginSuccess = true;
@@ -93,7 +93,7 @@ void login::on_loginbutton_clicked()
         User currentUser(matchedId, matchedUsername.toStdString());
         userPage *userPageWindow = new userPage(currentUser);
         QObject::connect(userPageWindow, &userPage::logoutSignal, [&]() {
-            this->show();  // Bring login back
+            this->show();  
             ui->iusername->clear();
             ui->ipassword->clear();
             ui->rusername->clear();
@@ -116,13 +116,13 @@ void login::on_registerBtn_clicked()
     QString newUsername = ui->rusername->text();
     QString newPassword = ui->rpassword->text();
 
-    // Username validation
+    
     if (newUsername.length() < 4) {
         QMessageBox::warning(this, "Validation Error", "Username must be at least 4 characters long.");
         return;
     }
 
-    // Password validation
+    
     if (newPassword.length() < 8 || newPassword.length() > 12) {
         QMessageBox::warning(this, "Validation Error", "Password must be 8–12 characters long.");
         return;
@@ -140,7 +140,7 @@ void login::on_registerBtn_clicked()
         return;
     }
 
-    // Check for existing username and determine the last user ID
+    
     int lastId = 0;
     bool usernameExists = false;
 
@@ -171,17 +171,17 @@ void login::on_registerBtn_clicked()
         return;
     }
 
-    // Set the static nextUid to lastId + 1
+    
     User::nextUid = lastId + 1;
 
-    // Create a new User
+    
     User newUser(newUsername.toStdString());
     int userId = newUser.getId();
 
-    // Encrypt the password
+    
     xorEncryptDecrypt(newPassword);
 
-    // Append new user to the file
+    
     QFile file("users.txt");
     if (!file.open(QIODevice::Append | QIODevice::Text)) {
         QMessageBox::critical(this, "Error", "Unable to open users.txt");
@@ -193,7 +193,7 @@ void login::on_registerBtn_clicked()
     file.close();
 
     QMessageBox::information(this, "Registration", "Account created successfully.");
-    ui->errormsg2->hide(); // can cause an error because void login::hideAll() also contains this line. I havent encountered an error rn
+    ui->errormsg2->hide(); 
     ui->rusername->clear();
     ui->rpassword->clear();
 }
@@ -222,13 +222,13 @@ void login::validateRegisterFields() {
     bool valid = true;
     QString errorMsg;
 
-    // Username check
+    
     if (username.length() < 4) {
         valid = false;
         errorMsg += "Username must be at least 4 characters.\n";
     }
 
-    // Password checks
+    
     QRegularExpression reLetter("[A-Za-z]");
     QRegularExpression reDigit("\\d");
     QRegularExpression reSpecial("[^A-Za-z\\d]");
@@ -250,17 +250,17 @@ void login::validateRegisterFields() {
         errorMsg += "Password must contain at least one special character.\n";
     }
 
-    // Show error message in QLabel (e.g. ui->registerError)
+    
     ui->errormsg2->setStyleSheet("QLabel { color: red; }");
     ui->errormsg2->setText(errorMsg);
 
-    // Enable/disable register button
+    
     ui->registerBtn->setEnabled(valid);
 }
 
 
 void login::hideAll() {
-    // Hide all login and register widgets
+    
     ui->iusername->hide();
     ui->ipassword->hide();
     ui->loginbutton->hide();
@@ -283,14 +283,14 @@ void login::hideAll() {
 void login::on_LP_clicked() {
     hideAll();
 
-    // Show login widgets
+    
     ui->iusername->show();
     ui->ipassword->show();
     ui->loginbutton->show();
     ui->label->show();
     ui->label_2->show();
     ui->label_4->show();
-    ui->loginShowPassword->show(); // 👈 Show checkbox
+    ui->loginShowPassword->show(); 
     ui->errormsg2->hide();
 }
 
@@ -299,14 +299,14 @@ void login::on_LP_clicked() {
 void login::on_RP_clicked() {
     hideAll();
 
-    // Show register widgets
+    
     ui->rusername->show();
     ui->rpassword->show();
     ui->registerBtn->show();
     ui->label_3->show();
     ui->label_6->show();
     ui->label_5->show();
-    ui->registerShowPassword->show(); // 👈 Show checkbox
+    ui->registerShowPassword->show(); 
     ui->errormsg2->show();
 }
 

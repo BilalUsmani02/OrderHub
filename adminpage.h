@@ -36,4 +36,4 @@ private:
     Ui::adminPage *ui;
 };
 
-#endif // ADMINPAGE_H
+#endif
