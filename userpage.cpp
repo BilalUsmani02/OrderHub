@@ -18,9 +18,11 @@ userPage::userPage(User& user,QWidget *parent)
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
     this->show();
+    populateProductTable();
 
-    // inside userPage constructor after setupUi
 
+}
+void userPage::populateProductTable(){
     vector<Product>* prods = Store::getInstance()->allProducts();
     ui->productList->setColumnCount(4);
     QStringList headers;
@@ -83,9 +85,7 @@ userPage::userPage(User& user,QWidget *parent)
             qtyLabel->setText("1");
         });
     }
-
 }
-
 void userPage::populateCartTable(const Order& ord)
 {
     qDebug() << "Populating cart table";
@@ -177,7 +177,9 @@ void userPage::on_tabWidget_tabBarClicked(int index)
     ui->cartList->setRowCount(0);
     ui->cartList->setColumnCount(0);
 
-
+    if(index==1){
+        populateProductTable();
+    }
     if (index == 2 && !order.getCart().empty()) {
         qDebug() << "Switching to Cart tab with non-empty cart";
         populateCartTable(order);
@@ -274,7 +276,9 @@ void userPage::onPaymentFinished()
 
 void userPage::on_logout_clicked()
 {
-    delete this;
+    emit logoutSignal();
+    qDebug()<<"loged out";
+    this->close();
     qDebug() << "User logged out. Closing userPage.";
 
 }

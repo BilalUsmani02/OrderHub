@@ -17,6 +17,8 @@ public:
 
 signals:
     void cartUpdated(const Order&);
+    void logoutSignal();
+
 public slots:
     void onPaymentFinished(); // Slot to handle payment completion
 
@@ -31,5 +33,6 @@ private:
     Order order;
     void populateCartTable(const Order& ord);
     vector<Product>* prods;
+    void populateProductTable();
 };
 #endif // USERPAGE_H

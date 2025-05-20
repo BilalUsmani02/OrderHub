@@ -30,6 +30,8 @@ private slots:
     void hideAll();
     void on_RP_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::login *ui;
 };

@@ -43,6 +43,7 @@ public:
     QCheckBox *loginShowPassword;
     QCheckBox *registerShowPassword;
     QLabel *errormsg2;
+    QPushButton *pushButton;
 
     void setupUi(QMainWindow *login)
     {
@@ -103,7 +104,7 @@ public:
         RP->setGeometry(QRect(30, 60, 100, 30));
         label_7 = new QLabel(centralwidget);
         label_7->setObjectName("label_7");
-        label_7->setGeometry(QRect(840, 30, 281, 121));
+        label_7->setGeometry(QRect(400, 20, 281, 121));
         label_7->setPixmap(QPixmap(QString::fromUtf8("order-hub-high-resolution-logo.png")));
         label_7->setScaledContents(true);
         loginShowPassword = new QCheckBox(centralwidget);
@@ -115,6 +116,9 @@ public:
         errormsg2 = new QLabel(centralwidget);
         errormsg2->setObjectName("errormsg2");
         errormsg2->setGeometry(QRect(400, 300, 351, 61));
+        pushButton = new QPushButton(centralwidget);
+        pushButton->setObjectName("pushButton");
+        pushButton->setGeometry(QRect(970, 30, 83, 29));
         login->setCentralWidget(centralwidget);
 
         retranslateUi(login);
@@ -140,6 +144,7 @@ public:
         loginShowPassword->setText(QCoreApplication::translate("login", "Show", nullptr));
         registerShowPassword->setText(QCoreApplication::translate("login", "Show", nullptr));
         errormsg2->setText(QString());
+        pushButton->setText(QCoreApplication::translate("login", "Exit", nullptr));
     } // retranslateUi
 
 };

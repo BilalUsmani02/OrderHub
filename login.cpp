@@ -92,9 +92,14 @@ void login::on_loginbutton_clicked()
     if (loginSuccess) {
         User currentUser(matchedId, matchedUsername.toStdString());
         userPage *userPageWindow = new userPage(currentUser);
+
+        QObject::connect(userPageWindow, &userPage::logoutSignal, [&]() {
+            this->show();  // Bring login back
+        });
         connect(userPageWindow, &userPage::destroyed, this, &login::show);
         userPageWindow->show();
         this->hide();
+
     } else {
         ui->errormsg->setText("Invalid username or password");
         ui->errormsg->setStyleSheet("QLabel { color : red; }");
@@ -301,5 +306,11 @@ void login::on_RP_clicked() {
     ui->label_5->show();
     ui->registerShowPassword->show(); // 👈 Show checkbox
     ui->errormsg2->show();
+}
+
+
+void login::on_pushButton_clicked()
+{
+    QApplication::quit();
 }
 
