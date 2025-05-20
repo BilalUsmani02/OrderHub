@@ -45,6 +45,7 @@ void OrderItem::display() const{
 
 string PaymentMethod::getPaymentType()const{return paymentType;}
 float PaymentMethod::getAmountPaid()const{return amountPaid;}
+void PaymentMethod::setPaymentType(string type){paymentType=type;}
 PaymentMethod::~PaymentMethod(){}
 
 CardPayment::CardPayment(string cn, string exp, string cvv,float amt) {
@@ -111,7 +112,7 @@ Order::Order(int uid){
     userId=uid;
     status="Pending";
     paymentMethod = nullptr;
-
+    payMethod="";
 }
 
 Order::~Order(){
@@ -125,11 +126,14 @@ string Order::getStatus() const {return status;}
 string Order::getPaymentType() const{return paymentMethod->getPaymentType();}
 PaymentMethod* Order::getPaymentMethod() const{return paymentMethod;}
 
+
 void Order::setStatus(string stat){status=stat;}
 void Order::setAddress(string add){address=add;}
 void Order::setPaymentMethod(PaymentMethod* pm){
     paymentMethod = pm;
 }
+void Order::setPayMethod(string method){payMethod=method;}
+string Order::getPayMethod()const{return payMethod;}
 
 void Order::addItem(OrderItem item){
     cart.push_back(item);
@@ -234,38 +238,7 @@ void Store::loadProducts(){
     }
     fin.close();
 }
-void Store::loadOrders(){
-    ifstream fin("orders.bin", ios::binary);
-    if (!fin) {
-        ofstream fout("orders.bin", ios::binary); // create file
-        return;
-    }
-    int oid, uid, cartSize, pid, qty;
-    float price;
-    size_t len;
-    string status, name;
-    while (fin.read(reinterpret_cast<char*>(&oid), sizeof(oid))) {
-        fin.read(reinterpret_cast<char*>(&uid), sizeof(uid));
-        fin.read(reinterpret_cast<char*>(&len), sizeof(len));
-        status.resize(len);
-        fin.read(&status[0], len);
-        Order order(uid);
-        order.setStatus(status);
 
-        fin.read(reinterpret_cast<char*>(&cartSize), sizeof(cartSize));
-        for (int i = 0; i < cartSize; ++i) {
-            fin.read(reinterpret_cast<char*>(&pid), sizeof(pid));
-            fin.read(reinterpret_cast<char*>(&len), sizeof(len));
-            name.resize(len);
-            fin.read(&name[0], len);
-            fin.read(reinterpret_cast<char*>(&price), sizeof(price));
-            fin.read(reinterpret_cast<char*>(&qty), sizeof(qty));
-            order.addItem(OrderItem(pid, name, price, qty));
-        }
-        orders.push_back(order);
-    }
-    fin.close();
-}
 
 Store* Store::getInstance() {
     static Store instance;
@@ -300,28 +273,44 @@ void Store::saveProducts(){
     }
     fout.close();
 }
+// In Store.cpp
 
-void Store::saveOrders(){
+void Store::saveOrders() {
     ofstream fout("orders.bin", ios::binary | ios::trunc);
-    for (const auto& o : orders){
+    for (const auto& o : orders) {
         int oid = o.getId();
         int uid = o.getUserId();
         string status = o.getStatus();
-        size_t len = status.size();
+        string address = o.getAddress();
+        string payMethod = o.getPayMethod();
+
+        size_t len;
+
         fout.write(reinterpret_cast<char*>(&oid), sizeof(oid));
         fout.write(reinterpret_cast<char*>(&uid), sizeof(uid));
+
+        len = status.size();
         fout.write(reinterpret_cast<char*>(&len), sizeof(len));
         fout.write(status.c_str(), len);
+
+        len = address.size();
+        fout.write(reinterpret_cast<char*>(&len), sizeof(len));
+        fout.write(address.c_str(), len);
+
+        len = payMethod.size();
+        fout.write(reinterpret_cast<char*>(&len), sizeof(len));
+        fout.write(payMethod.c_str(), len);
 
         const vector<OrderItem>& cart = o.getCart();
         int cartSize = cart.size();
         fout.write(reinterpret_cast<char*>(&cartSize), sizeof(cartSize));
 
-        for (const auto& item : cart){
+        for (const auto& item : cart) {
             int pid = item.getId();
             string name = item.getName();
             float price = item.getPrice();
             int qty = item.getQuantity();
+
             len = name.size();
             fout.write(reinterpret_cast<char*>(&pid), sizeof(pid));
             fout.write(reinterpret_cast<char*>(&len), sizeof(len));
@@ -332,6 +321,57 @@ void Store::saveOrders(){
     }
     fout.close();
 }
+
+void Store::loadOrders() {
+    ifstream fin("orders.bin", ios::binary);
+    if (!fin) {
+        ofstream fout("orders.bin", ios::binary);
+        return;
+    }
+
+    int oid, uid, cartSize, pid, qty;
+    float price;
+    size_t len;
+    string status, name, address, payMethod;
+
+    while (fin.read(reinterpret_cast<char*>(&oid), sizeof(oid))) {
+        fin.read(reinterpret_cast<char*>(&uid), sizeof(uid));
+
+        fin.read(reinterpret_cast<char*>(&len), sizeof(len));
+        status.resize(len);
+        fin.read(&status[0], len);
+
+        fin.read(reinterpret_cast<char*>(&len), sizeof(len));
+        address.resize(len);
+        fin.read(&address[0], len);
+
+        fin.read(reinterpret_cast<char*>(&len), sizeof(len));
+        payMethod.resize(len);
+        fin.read(&payMethod[0], len);
+
+        Order order(uid);
+        order.setStatus(status);
+        order.setAddress(address);
+        order.setPayMethod(payMethod);
+
+        fin.read(reinterpret_cast<char*>(&cartSize), sizeof(cartSize));
+        for (int i = 0; i < cartSize; ++i) {
+            fin.read(reinterpret_cast<char*>(&pid), sizeof(pid));
+            fin.read(reinterpret_cast<char*>(&len), sizeof(len));
+            name.resize(len);
+            fin.read(&name[0], len);
+            fin.read(reinterpret_cast<char*>(&price), sizeof(price));
+            fin.read(reinterpret_cast<char*>(&qty), sizeof(qty));
+            order.addItem(OrderItem(pid, name, price, qty));
+        }
+
+        orders.push_back(order);
+    }
+
+    fin.close();
+}
+
+
 
 void Store::addProduct(const Product& p){products.push_back(p);}
 void Store::addOrder(Order o){orders.push_back(o);}

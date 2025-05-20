@@ -108,6 +108,7 @@ void Payment::on_placeOrder_clicked()
     if (idx == 0) {
         qDebug() << "[Payment] Cash selected";
         payment = new CashPayment();
+        ord.setPayMethod("Cash");
     } else if (idx == 1) {
         qDebug() << "[Payment] Card selected";
         QString cardNo = ui->cardnum->text();
@@ -134,13 +135,14 @@ void Payment::on_placeOrder_clicked()
         if (ok) {
             qDebug() << "[Payment] Card data valid. Creating CardPayment object.";
             payment = new CardPayment(cardNo.toStdString(), exp.toStdString(), cvv.toStdString(), ord.calculateTotalPrice());
+            ord.setPayMethod("Card");
         } else {
             qDebug() << "[Payment] Card data invalid:" << err;
         }
 
     } else if (idx == 2 || idx == 3) {
         qDebug() << "[Payment] EasyPaisa/JazzCash selected";
-        QString acc = ui->accnum->text().trimmed();
+        QString acc = ui->laccnum->text().trimmed();
         QRegularExpression accRegex("^03\\d{9}$");
 
         qDebug() << "[Payment] Entered account:" << acc;
@@ -149,10 +151,12 @@ void Payment::on_placeOrder_clicked()
             err = "Account number must be 11 digits and start with 03.";
             ok = false;
         } else {
-            if (idx == 2)
+            if (idx == 2){
                 payment = new EasyPaisaPayment(acc.toStdString());
-            else
+                ord.setPayMethod("EasyPaisa");}
+            else{
                 payment = new JazzCashPayment(acc.toStdString());
+                ord.setPayMethod("JazzCash");}
 
             qDebug() << "[Payment] Account number valid. Payment object created.";
         }

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 #include <fstream>
 #include<QString>
 
@@ -47,6 +48,7 @@ public:
     float getAmountPaid()const;
     virtual void pay(float amount) = 0;
     virtual ~PaymentMethod();
+    void setPaymentType(string type);
 };
 
 class CardPayment : public PaymentMethod {
@@ -86,10 +88,11 @@ class Order{
     string status;
     vector<OrderItem> cart;
     PaymentMethod* paymentMethod;
+    string payMethod;
+
 
 public:
     Order(int uid);
-
     ~Order();
     const vector<OrderItem>& getCart() const ;
     int getId() const;
@@ -110,6 +113,8 @@ public:
     float calculateTotalPrice() const;
     void display() const;
     void addItemToCart(OrderItem item);
+    void setPayMethod(string method);
+    string getPayMethod()const;
 };
 
 
