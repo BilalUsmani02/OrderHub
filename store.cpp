@@ -47,6 +47,9 @@ string PaymentMethod::getPaymentType()const{return paymentType;}
 float PaymentMethod::getAmountPaid()const{return amountPaid;}
 void PaymentMethod::setPaymentType(string type){paymentType=type;}
 PaymentMethod::~PaymentMethod(){}
+CardPayment::CardPayment(){
+
+}
 
 CardPayment::CardPayment(string cn, string exp, string cvv,float amt) {
     cardNumber=cn;
@@ -78,7 +81,8 @@ void CashPayment::pay(float amount){
     cout << "Cash on delivery of Rs." << amount <<"selected" << endl;
 
 }
-
+EasyPaisaPayment::EasyPaisaPayment() {
+}
 EasyPaisaPayment::EasyPaisaPayment(string acc) {
     accountNumber=acc;
     paymentType = "EasyPaisa";
@@ -92,6 +96,9 @@ void EasyPaisaPayment::pay(float amount){
     cout << "EasyPaisa payment of Rs." << amount << " processed successfully.\n";
 }
 
+JazzCashPayment::JazzCashPayment(){
+
+}
 JazzCashPayment::JazzCashPayment(string acc) {
     accountNumber=acc;
     paymentType = "JazzCash";
